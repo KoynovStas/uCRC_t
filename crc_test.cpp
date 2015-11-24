@@ -1663,6 +1663,50 @@ int test_crc64_3(struct test_info_t  *test_info)
 
 
 
+//------------- tests for Calculate CRC for file -------------
+
+
+
+int test_crc32_file(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint64_t crc;
+
+    CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+
+    int res = ucrc.get_crc(&crc, "standard_check_file");
+
+    if( (res != 0) ||  (crc != 0xCBF43926) )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
+int test_crc32_file_2(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint64_t crc;
+
+    CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+
+    int res = ucrc.get_crc(&crc, ""); //no file
+
+    if( (res != -1) )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1771,6 +1815,9 @@ ptest_func tests[] =
     test_crc64,
     test_crc64_2,
     test_crc64_3,
+
+    test_crc32_file,
+    test_crc32_file_2,
 };
 
 
