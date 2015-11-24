@@ -960,6 +960,26 @@ int test_crc16_5(struct test_info_t  *test_info)
 
 
 
+//width=16  poly=0x8005  init=0x800d  refin=false  refout=false  xorout=0x0000  check=0x9ecf  name="CRC-16/DDS-110"
+int test_crc16_6(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint16_t crc;
+
+    CRC_t ucrc(16, 0x8005, 0x800d, false, false, 0x0);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x9ecf )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1028,6 +1048,7 @@ ptest_func tests[] =
     test_crc16_3,
     test_crc16_4,
     test_crc16_5,
+    test_crc16_6,
 
 };
 
