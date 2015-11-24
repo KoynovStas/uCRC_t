@@ -1060,6 +1060,26 @@ int test_crc16_10(struct test_info_t  *test_info)
 
 
 
+//width=16  poly=0x1021  init=0xffff  refin=false  refout=false  xorout=0xffff  check=0xd64e  name="CRC-16/GENIBUS"
+int test_crc16_11(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint16_t crc;
+
+    CRC_t ucrc(16, 0x1021, 0xffff, false, false, 0xffff);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0xd64e )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1133,6 +1153,7 @@ ptest_func tests[] =
     test_crc16_8,
     test_crc16_9,
     test_crc16_10,
+    test_crc16_11,
 
 };
 
