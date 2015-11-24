@@ -1260,6 +1260,26 @@ int test_crc16_20(struct test_info_t  *test_info)
 
 
 
+//width=16  poly=0x8005  init=0xffff  refin=true  refout=true  xorout=0x0000  check=0x4b37  name="CRC-16/MODBUS"
+int test_crc16_21(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint16_t crc;
+
+    CRC_t ucrc(16, 0x8005, 0xffff, true, true, 0x0);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x4b37 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1343,6 +1363,7 @@ ptest_func tests[] =
     test_crc16_18,
     test_crc16_19,
     test_crc16_20,
+    test_crc16_21,
 
 };
 
