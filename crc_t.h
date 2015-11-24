@@ -82,6 +82,7 @@ class CRC_t
         // set param CRC
         int  set_bits(uint8_t new_bits);
         void set_poly(uint64_t new_poly)       { poly    = new_poly; init_class();}
+        void set_init(uint64_t new_init)       { init    = new_init; init_class();}
 
 
 
