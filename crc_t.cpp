@@ -50,6 +50,15 @@ int CRC_t::set_bits(uint8_t new_bits)
 
 
 
+uint64_t CRC_t::get_crc(const char *buf, size_t len)
+{
+    uint64_t crc = get_raw_crc(crc_init, buf, len);
+
+    return get_final_crc(crc);
+}
+
+
+
 uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len)
 {
     if(bits > 8)
