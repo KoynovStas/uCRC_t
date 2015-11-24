@@ -153,6 +153,49 @@ int test_crc_t_get_ref_out(struct test_info_t  *test_info)
 
 
 
+int test_crc_t_set_bits(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    int i, res;
+
+    CRC_t crc(1, 0, 0, true, true, 0);
+
+
+    if( crc.get_bits() != 1 )
+        return TEST_BROKEN;
+
+
+    if( crc.set_bits(0) != -1 )
+         return TEST_BROKEN;
+
+    // 1..64
+    for( i = 1; i <= 64; ++i)
+    {
+        res = crc.set_bits(i);
+        if( res != 0 )
+             return TEST_BROKEN;
+
+        if( crc.get_bits() != i )
+            return TEST_BROKEN;
+    }
+
+
+    //more 64
+    for( i = 65; i <= 256; ++i)
+    {
+        if( crc.set_bits(i) != -1 )
+             return TEST_BROKEN;
+    }
+
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -167,6 +210,7 @@ ptest_func tests[] =
     test_crc_t_get_ref_in,
     test_crc_t_get_ref_out,
 
+    test_crc_t_set_bits,
 
 
 };
