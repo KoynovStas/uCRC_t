@@ -1738,6 +1738,38 @@ int test_crc32_cunks(struct test_info_t  *test_info)
 
 
 
+int test_dif_crc(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint64_t crc;
+
+    CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0xCBF43926 )
+        return TEST_BROKEN;
+
+
+    //change algo to CRC-64/XZ
+    ucrc.set_bits(64);
+    ucrc.set_poly(0x42f0e1eba9ea3693);
+    ucrc.set_init(0xffffffffffffffff);
+    ucrc.set_ref_in(true);
+    ucrc.set_ref_out(true);
+    ucrc.set_xor_out(0xffffffffffffffff);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x995dc9bbdf1939fa )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1851,6 +1883,8 @@ ptest_func tests[] =
     test_crc32_file_2,
 
     test_crc32_cunks,
+
+    test_dif_crc,
 };
 
 
