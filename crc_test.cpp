@@ -1421,6 +1421,26 @@ int test_crc32(struct test_info_t  *test_info)
 
 
 
+//width=32 poly=0x04c11db7 init=0xffffffff refin=false refout=false xorout=0xffffffff check=0xfc891918 name="CRC-32/BZIP2"
+int test_crc32_2(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint32_t crc;
+
+    CRC_t ucrc(32, 0x04c11db7, 0xFFFFFFFF, false, false, 0xFFFFFFFF);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0xfc891918 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1515,6 +1535,7 @@ ptest_func tests[] =
     test_crc31,
 
     test_crc32,
+    test_crc32_2,
 };
 
 
