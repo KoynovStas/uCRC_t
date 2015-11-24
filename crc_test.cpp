@@ -1360,6 +1360,26 @@ int test_crc24_2(struct test_info_t  *test_info)
 
 
 
+//width=24 poly=0x5d6dcb init=0xabcdef refin=false refout=false xorout=0x000000 check=0x1f23b8 name="CRC-24/FLEXRAY-B"
+int test_crc24_3(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint32_t crc;
+
+    CRC_t ucrc(24, 0x5d6dcb, 0xabcdef, false, false, 0x0);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x1f23b8 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1449,6 +1469,7 @@ ptest_func tests[] =
 
     test_crc24,
     test_crc24_2,
+    test_crc24_3,
 
 };
 
