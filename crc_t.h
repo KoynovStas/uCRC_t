@@ -66,6 +66,15 @@ class CRC_t
         std::string name;
 
 
+        // get param CRC
+        uint8_t  get_bits()    const { return bits;   }
+        uint64_t get_poly()    const { return poly;   }
+        uint64_t get_init()    const { return init;   }
+        uint64_t get_xor_out() const { return xor_out;}
+        bool     get_ref_in()  const { return ref_in; }
+        bool     get_ref_out() const { return ref_out;}
+
+
 
     private:
 
