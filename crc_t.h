@@ -85,8 +85,16 @@ class CRC_t
         bool     ref_out;
         uint64_t xor_out;
 
+        uint8_t  shift;
+        uint64_t crc_init;
+        uint64_t top_bit;
+        uint64_t crc_mask;
+        uint64_t crc_table[256];
+
 
         uint64_t reflect(uint64_t data, uint8_t num_bits);
+        void     init_crc_table();
+        void     init_class();
 };
 
 
