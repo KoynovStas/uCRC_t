@@ -84,6 +84,9 @@ class CRC_t
         bool     ref_in;
         bool     ref_out;
         uint64_t xor_out;
+
+
+        uint64_t reflect(uint64_t data, uint8_t num_bits);
 };
 
 
