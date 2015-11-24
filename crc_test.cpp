@@ -427,7 +427,7 @@ ptest_func tests[] =
     test_crc5_3,
 
     test_crc6,
-    est_crc6_2,
+    test_crc6_2,
     test_crc6_3,
     test_crc6_4,
 
