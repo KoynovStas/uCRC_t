@@ -1581,6 +1581,26 @@ int test_crc32_9(struct test_info_t  *test_info)
 
 
 
+//width=40 poly=0x0004820009 init=0x0 refin=false refout=false xorout=0xffffffffff check=0xd4164fc646 name="CRC-40/GSM"
+int test_crc40(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint64_t crc;
+
+    CRC_t ucrc(40, 0x0004820009, 0x0, false, false, 0xffffffffff);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0xd4164fc646 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1683,6 +1703,8 @@ ptest_func tests[] =
     test_crc32_7,
     test_crc32_8,
     test_crc32_9,
+
+    test_crc40,
 };
 
 
