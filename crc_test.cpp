@@ -439,6 +439,25 @@ int test_crc7_2(struct test_info_t  *test_info)
 
 
 
+int test_crc8(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint8_t crc;
+
+    CRC_t ucrc(8, 0x31, 0xFF, false, false, 0x00);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0xF7 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -473,6 +492,8 @@ ptest_func tests[] =
 
     test_crc7,
     test_crc7_2,
+
+    test_crc8,
 
 };
 
