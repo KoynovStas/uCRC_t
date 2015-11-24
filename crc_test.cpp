@@ -299,6 +299,26 @@ int test_crc5_2(struct test_info_t  *test_info)
 
 
 
+//width=5 poly=0x05 init=0x1f refin=true refout=true xorout=0x1f check=0x19 name="CRC-5/USB"
+int test_crc5_3(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint8_t crc;
+
+    CRC_t ucrc(5, 0x05, 0x1f, true, true, 0x1f);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x19 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -324,6 +344,7 @@ ptest_func tests[] =
 
     test_crc5,
     test_crc5_2,
+    test_crc5_3,
 
 
 };
