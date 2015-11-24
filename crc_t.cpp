@@ -77,6 +77,18 @@ uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len)
 
 
 
+uint64_t CRC_t::get_final_crc(uint64_t raw_crc)
+{
+    if(ref_out^ref_in) raw_crc = reflect(raw_crc, bits);
+
+    raw_crc ^= xor_out;
+    raw_crc &= crc_mask; //for CRC not power 2
+
+    return raw_crc;
+}
+
+
+
 uint64_t CRC_t::reflect(uint64_t data, uint8_t num_bits)
 {
     uint64_t reflection = 0;

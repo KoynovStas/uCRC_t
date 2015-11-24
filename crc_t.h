@@ -90,6 +90,7 @@ class CRC_t
 
         // Calculate for chunks of data
         uint64_t get_raw_crc(uint64_t crc, const char* buf, size_t len); //for first byte crc = crc_init (must be)
+        uint64_t get_final_crc(uint64_t raw_crc);
 
 
 
