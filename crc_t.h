@@ -88,6 +88,10 @@ class CRC_t
         void set_ref_out(bool new_ref_out)     { ref_out = new_ref_out;}
 
 
+        // Calculate for chunks of data
+        uint64_t get_raw_crc(uint64_t crc, const char* buf, size_t len); //for first byte crc = crc_init (must be)
+
+
 
     private:
 

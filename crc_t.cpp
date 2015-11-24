@@ -50,6 +50,33 @@ int CRC_t::set_bits(uint8_t new_bits)
 
 
 
+uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len)
+{
+    if(bits > 8)
+    {
+        if(ref_in)
+            while (len--)
+                crc = (crc >> 8) ^ crc_table[ (crc ^ *buf++) & 0xff ];
+        else
+            while (len--)
+                crc = (crc << 8) ^ crc_table[ ((crc >> shift) & 0xff) ^ *buf++ ];
+    }
+    else
+    {
+        if (ref_in)
+            while (len--)
+                crc = crc_table[ crc ^ *buf++ ];
+        else
+            while (len--)
+                crc = crc_table[ (crc << shift) ^ *buf++ ];
+    }
+
+
+    return crc;
+}
+
+
+
 uint64_t CRC_t::reflect(uint64_t data, uint8_t num_bits)
 {
     uint64_t reflection = 0;
