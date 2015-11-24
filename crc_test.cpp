@@ -259,6 +259,26 @@ int test_crc4_2(struct test_info_t  *test_info)
 
 
 
+//width=5 poly=0x09 init=0x09 refin=false refout=false xorout=0x00 check=0x00 name="CRC-5/EPC"
+int test_crc5(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint8_t crc;
+
+    CRC_t ucrc(5, 0x09, 0x09, false, false, 0x0);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x0 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -281,6 +301,8 @@ ptest_func tests[] =
 
     test_crc4,
     test_crc4_2,
+
+    test_crc5,
 
 
 };
