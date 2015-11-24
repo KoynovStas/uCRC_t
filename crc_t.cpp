@@ -59,6 +59,39 @@ uint64_t CRC_t::get_crc(const char *buf, size_t len)
 
 
 
+int CRC_t::get_crc(uint64_t *crc, const char *file_name)
+{
+    if( !file_name || !crc )
+        return -1; //Bad param
+
+    *crc = crc_init;
+
+    char buf[4096];
+
+
+    FILE *stream = fopen(file_name, "rb");
+    if( stream == NULL )
+        return -1; //Cant open file
+
+
+    while( !feof(stream) )
+    {
+       size_t len = fread(buf, 1, sizeof(buf), stream);
+       *crc = get_raw_crc(*crc, buf, len);
+    }
+
+
+    fclose(stream);
+
+
+    *crc = get_final_crc(*crc);
+
+
+    return 0; //good  job
+}
+
+
+
 uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len)
 {
     if(bits > 8)
