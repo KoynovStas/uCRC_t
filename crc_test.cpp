@@ -99,7 +99,6 @@ int test_crc_t_get_init(struct test_info_t  *test_info)
 
 
 
-
 int test_crc_t_get_xor_out(struct test_info_t  *test_info)
 {
 
@@ -118,7 +117,6 @@ int test_crc_t_get_xor_out(struct test_info_t  *test_info)
 
 
 
-
 int test_crc_t_get_ref_in(struct test_info_t  *test_info)
 {
 
@@ -134,7 +132,6 @@ int test_crc_t_get_ref_in(struct test_info_t  *test_info)
 
     return TEST_PASSED;
 }
-
 
 
 
