@@ -35,6 +35,21 @@ CRC_t::CRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut
 
 
 
+int CRC_t::set_bits(uint8_t new_bits)
+{
+    if( (new_bits < 1) || (new_bits > 64) )
+        return -1; //error
+
+
+    bits = new_bits;
+    init_class();
+
+
+    return 0; //good job
+}
+
+
+
 uint64_t CRC_t::reflect(uint64_t data, uint8_t num_bits)
 {
     uint64_t reflection = 0;

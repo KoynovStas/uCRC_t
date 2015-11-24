@@ -79,6 +79,10 @@ class CRC_t
         uint64_t get_crc_mask()const { return crc_mask;}
 
 
+        // set param CRC
+        int  set_bits(uint8_t new_bits);
+
+
 
     private:
 
