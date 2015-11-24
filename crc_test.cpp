@@ -458,6 +458,26 @@ int test_crc8(struct test_info_t  *test_info)
 
 
 
+//width=8 poly=0x07 init=0x00 refin=false refout=false xorout=0x00 check=0xf4 name="CRC-8"
+int test_crc8_2(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint8_t crc;
+
+    CRC_t ucrc(8, 0x07, 0x0, false, false, 0x0);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0xF4 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -494,6 +514,7 @@ ptest_func tests[] =
     test_crc7_2,
 
     test_crc8,
+    test_crc8_2,
 
 };
 
