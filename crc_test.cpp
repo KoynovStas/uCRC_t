@@ -980,6 +980,26 @@ int test_crc16_6(struct test_info_t  *test_info)
 
 
 
+//width=16  poly=0x0589  init=0x0000  refin=false  refout=false  xorout=0x0001  check=0x007e  name="CRC-16/DECT-R"
+int test_crc16_7(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint16_t crc;
+
+    CRC_t ucrc(16, 0x0589, 0x0, false, false, 0x0001);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x007e )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1049,6 +1069,7 @@ ptest_func tests[] =
     test_crc16_4,
     test_crc16_5,
     test_crc16_6,
+    test_crc16_7,
 
 };
 
