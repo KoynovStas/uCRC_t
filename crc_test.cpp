@@ -1481,6 +1481,26 @@ int test_crc32_4(struct test_info_t  *test_info)
 
 
 
+//width=32 poly=0x04c11db7 init=0xffffffff refin=false refout=false xorout=0x00000000 check=0x0376e6e7 name="CRC-32/MPEG-2"
+int test_crc32_5(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint32_t crc;
+
+    CRC_t ucrc(32, 0x04c11db7, 0xFFFFFFFF, false, false, 0x0);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x0376e6e7 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -1578,6 +1598,7 @@ ptest_func tests[] =
     test_crc32_2,
     test_crc32_3,
     test_crc32_4,
+    test_crc32_5,
 };
 
 
