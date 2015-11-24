@@ -74,6 +74,8 @@ class CRC_t
         bool     get_ref_in()  const { return ref_in; }
         bool     get_ref_out() const { return ref_out;}
 
+        uint64_t get_crc_init()const { return crc_init;} //crc_init = reflect(init, bits) if RefIn, else = init
+
 
 
     private:
