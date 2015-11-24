@@ -339,6 +339,26 @@ int test_crc6(struct test_info_t  *test_info)
 
 
 
+//width=6 poly=0x07 init=0x3f refin=false refout=false xorout=0x00 check=0x3b name="CRC-6/CDMA2000-B"
+int test_crc6_2(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint8_t crc;
+
+    CRC_t ucrc(6, 0x07, 0x3f, false, false, 0x0);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x3b )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -367,6 +387,7 @@ ptest_func tests[] =
     test_crc5_3,
 
     test_crc6,
+    est_crc6_2,
 
 
 };
