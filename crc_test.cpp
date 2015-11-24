@@ -658,6 +658,26 @@ int test_crc8_11(struct test_info_t  *test_info)
 
 
 
+//width=10 poly=0x233 init=0x000 refin=false refout=false xorout=0x000 check=0x199 name="CRC-10"
+int test_crc10(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint16_t crc;
+
+    CRC_t ucrc(10, 0x233, 0x0, false, false, 0x0);
+
+    crc = ucrc.get_crc("123456789", 9);
+    if( crc != 0x199 )
+        return TEST_BROKEN;
+
+
+    return TEST_PASSED;
+}
+
+
+
 ptest_func tests[] =
 {
 
@@ -704,6 +724,8 @@ ptest_func tests[] =
     test_crc8_9,
     test_crc8_10,
     test_crc8_11,
+
+    test_crc10,
 
 };
 
