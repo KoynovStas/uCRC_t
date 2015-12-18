@@ -37,31 +37,29 @@
 
 
 
-uCRC_t::uCRC_t(const std::string Name, uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut)
+uCRC_t::uCRC_t(const std::string Name, uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut) :
+    name    (Name),
+    bits    (Bits),
+    poly    (Poly),
+    init    (Init),
+    ref_in  (RefIn),
+    ref_out (RefOut),
+    xor_out (XorOut)
 {
-    name    = Name;
-    bits    = Bits;
-    poly    = Poly;
-    init    = Init;
-    ref_in  = RefIn;
-    ref_out = RefOut;
-    xor_out = XorOut;
-
 
     init_class();
 }
 
 
 
-uCRC_t::uCRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut)
+uCRC_t::uCRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut) :
+    bits    (Bits),
+    poly    (Poly),
+    init    (Init),
+    ref_in  (RefIn),
+    ref_out (RefOut),
+    xor_out (XorOut)
 {
-    bits    = Bits;
-    poly    = Poly;
-    init    = Init;
-    ref_in  = RefIn;
-    ref_out = RefOut;
-    xor_out = XorOut;
-
 
     init_class();
 }
