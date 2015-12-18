@@ -155,6 +155,25 @@ if( res != -1 )
 ```
 
 
+### Note: methods for calculate CRC file
+
+```C++
+int      get_crc(uint64_t &crc, const char* file_name) const;
+int      get_crc(uint64_t &crc, FILE* pfile) const;
+```
+These methods are reentrant. They use a buffer on the stack. 
+The buffer size is 4 Kib (4096 bytes) - which is optimal for most systems. 
+If you have a buffer or needs aligned buffer, you can use the following methods:
+
+```C++
+int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
+int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
+```
+
+The method which uses FILE* does not set the file pointer(pos) to the beginning. 
+After work, the file pointer(pos) points to the end of the file.
+
+
 **Get CRC-32 for single buf:**
 
 ```C++
