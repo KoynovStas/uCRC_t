@@ -83,7 +83,7 @@ int CRC_t::set_bits(uint8_t new_bits)
 
 
 
-uint64_t CRC_t::get_crc(const char *buf, size_t len)
+uint64_t CRC_t::get_crc(const char *buf, size_t len) const
 {
     uint64_t crc = get_raw_crc(crc_init, buf, len);
 
@@ -92,7 +92,7 @@ uint64_t CRC_t::get_crc(const char *buf, size_t len)
 
 
 
-int CRC_t::get_crc(uint64_t *crc, const char *file_name)
+int CRC_t::get_crc(uint64_t *crc, const char *file_name) const
 {
     if( !file_name || !crc )
         return -1; //Bad param
@@ -125,7 +125,7 @@ int CRC_t::get_crc(uint64_t *crc, const char *file_name)
 
 
 
-uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len)
+uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len) const
 {
     if(bits > 8)
     {
@@ -152,7 +152,7 @@ uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len)
 
 
 
-uint64_t CRC_t::get_final_crc(uint64_t raw_crc)
+uint64_t CRC_t::get_final_crc(uint64_t raw_crc) const
 {
     if(ref_out^ref_in) raw_crc = reflect(raw_crc, bits);
 
@@ -164,7 +164,7 @@ uint64_t CRC_t::get_final_crc(uint64_t raw_crc)
 
 
 
-uint64_t CRC_t::reflect(uint64_t data, uint8_t num_bits)
+uint64_t CRC_t::reflect(uint64_t data, uint8_t num_bits) const
 {
     uint64_t reflection = 0;
     uint64_t one = 1;

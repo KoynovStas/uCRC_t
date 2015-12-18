@@ -89,12 +89,12 @@ class CRC_t
 
 
         // Calculate methods
-        uint64_t get_crc(const char* buf, size_t len);
-        int      get_crc(uint64_t *crc, const char *file_name);
+        uint64_t get_crc(const char* buf, size_t len)  const;
+        int      get_crc(uint64_t *crc, const char *file_name)  const;
 
         // Calculate for chunks of data
-        uint64_t get_raw_crc(uint64_t crc, const char* buf, size_t len); //for first byte crc = crc_init (must be)
-        uint64_t get_final_crc(uint64_t raw_crc);
+        uint64_t get_raw_crc(uint64_t crc, const char* buf, size_t len) const; //for first byte crc = crc_init (must be)
+        uint64_t get_final_crc(uint64_t raw_crc) const;
 
 
 
@@ -114,7 +114,7 @@ class CRC_t
         uint64_t crc_table[256];
 
 
-        uint64_t reflect(uint64_t data, uint8_t num_bits);
+        uint64_t reflect(uint64_t data, uint8_t num_bits) const;
         void     init_crc_table();
         void     init_class();
 };
