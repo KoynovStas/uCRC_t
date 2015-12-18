@@ -93,7 +93,24 @@ uint64_t uCRC_t::get_crc(const char* buf, size_t len) const
 
 int uCRC_t::get_crc(uint64_t &crc, const char* file_name) const
 {
+    char buf[4096];
 
+    return get_crc(crc, file_name, buf, sizeof(buf));
+}
+
+
+
+int uCRC_t::get_crc(uint64_t &crc, FILE *pfile) const
+{
+    char buf[4096];
+
+    return get_crc(crc, pfile, buf, sizeof(buf));
+}
+
+
+
+int uCRC_t::get_crc(uint64_t &crc, const char *file_name, void *buf, size_t size_buf) const
+{
     if( !file_name )
     {
         errno = EINVAL;
@@ -106,7 +123,7 @@ int uCRC_t::get_crc(uint64_t &crc, const char* file_name) const
         return -1; //Cant open file
 
 
-    int res = get_crc(crc, stream);
+    int res = get_crc(crc, stream, buf, size_buf);
 
 
     fclose(stream);
@@ -117,9 +134,9 @@ int uCRC_t::get_crc(uint64_t &crc, const char* file_name) const
 
 
 
-int uCRC_t::get_crc(uint64_t &crc, FILE *pfile) const
+int uCRC_t::get_crc(uint64_t &crc, FILE *pfile, void *buf, size_t size_buf) const
 {
-    if( !pfile )
+    if( !pfile || !buf || (size_buf == 0) )
     {
         errno = EINVAL;
         return -1;
@@ -128,13 +145,11 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile) const
 
     crc = crc_init;
 
-    char buf[4096];
-
 
     while( !feof(pfile) )
     {
-       size_t len = fread(buf, 1, sizeof(buf), pfile);
-       crc = get_raw_crc(buf, len, crc);
+       size_t len = fread(buf, 1, size_buf, pfile);
+       crc = get_raw_crc((char *)buf, len, crc);
     }
 
 

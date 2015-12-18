@@ -93,6 +93,8 @@ class uCRC_t
         uint64_t get_crc(const char* buf, size_t len) const;
         int      get_crc(uint64_t &crc, const char* file_name) const;
         int      get_crc(uint64_t &crc, FILE* pfile) const;
+        int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
+        int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
 
 
         // Calculate for chunks of data
