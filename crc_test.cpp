@@ -1677,7 +1677,6 @@ int test_crc32_file(struct test_info_t  *test_info)
     uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     int res = ucrc.get_crc(crc, "std_file_to_test_crc");
-
     if( (res != 0) ||  (crc != 0xCBF43926) )
         return TEST_BROKEN;
 
@@ -1724,8 +1723,8 @@ int test_crc32_cunks(struct test_info_t  *test_info)
     uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     crc = ucrc.get_crc_init();
-    crc = ucrc.get_raw_crc(crc, buf, 4);
-    crc = ucrc.get_raw_crc(crc, buf2, 5);
+    crc = ucrc.get_raw_crc(buf, 4, crc);
+    crc = ucrc.get_raw_crc(buf2, 5, crc);
     crc = ucrc.get_final_crc(crc);
 
 

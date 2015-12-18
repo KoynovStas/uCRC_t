@@ -84,7 +84,7 @@ int uCRC_t::set_bits(uint8_t new_bits)
 
 uint64_t uCRC_t::get_crc(const char* buf, size_t len) const
 {
-    uint64_t crc = get_raw_crc(crc_init, buf, len);
+    uint64_t crc = get_raw_crc(buf, len, crc_init);
 
     return get_final_crc(crc);
 }
@@ -134,7 +134,7 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile) const
     while( !feof(pfile) )
     {
        size_t len = fread(buf, 1, sizeof(buf), pfile);
-       crc = get_raw_crc(crc, buf, len);
+       crc = get_raw_crc(buf, len, crc);
     }
 
 
@@ -146,7 +146,7 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile) const
 
 
 
-uint64_t uCRC_t::get_raw_crc(uint64_t crc, const char* buf, size_t len) const
+uint64_t uCRC_t::get_raw_crc(const char* buf, size_t len, uint64_t crc) const
 {
     if(bits > 8)
     {
