@@ -1,16 +1,16 @@
-# CRC_t - is C++ class for calculation CRC sizes 1-64 bits
+# uCRC_t - is C++ class for calculation CRC sizes 1-64 bits
 
 
 ## Description
 
-CRC_t is C++ class for calculation CRC sizes 1-64 bits.
+uCRC_t is universal C++ class for calculation CRC sizes(width) 1-64 bits.
 
 
 #### Features of the implementation:
 
- -  The code uses only the standard **C++03 not C++11** -> This allows you to use the class in the oldest projects with older compilers.
+ - The code uses only the standard **C++03 not C++11** -> This allows you to use the class in the oldest projects with older compilers.
  - In the code not uses the library boost.
- - The code has no dependencies, and imprisoned in the one file.
+ - The code has no dependencies.
  - For **any** bit-depth (width) of CRC will be use the standard table method for calculation. Will be calculated standart table for byte (table size 256 elements)
 
 
@@ -70,21 +70,21 @@ Class parameters is the standard Specifications algorithms CRC as described in R
 
 **The class has the following public methods:**
 ```C++
-explicit CRC_t(const std::string Name = "CRC-32",
-               uint8_t  Bits   = 32,
-               uint64_t Poly   = 0x04c11db7,
-               uint64_t Init   = 0xffffffff,
-               bool     RefIn  = true,
-               bool     RefOut = true,
-               uint64_t XorOut = 0xffffffff);
+explicit uCRC_t(const std::string Name = "CRC-32",
+                uint8_t  Bits   = 32,
+                uint64_t Poly   = 0x04c11db7,
+                uint64_t Init   = 0xffffffff,
+                bool     RefIn  = true,
+                bool     RefOut = true,
+                uint64_t XorOut = 0xffffffff);
 
 
-explicit CRC_t(uint8_t  Bits,
-               uint64_t Poly,
-               uint64_t Init,
-               bool     RefIn,
-               bool     RefOut,
-               uint64_t XorOut);
+explicit uCRC_t(uint8_t  Bits,
+                uint64_t Poly,
+                uint64_t Init,
+                bool     RefIn,
+                bool     RefOut,
+                uint64_t XorOut);
 
 
 std::string name;
@@ -113,15 +113,19 @@ void set_ref_out(bool new_ref_out)     { ref_out = new_ref_out;}
 
 
 // Calculate methods
-uint64_t get_crc(const char* buf, size_t len);
-int      get_crc(uint64_t *crc, const char *file_name);
+uint64_t get_crc(const char* buf, size_t len) const;
+int      get_crc(uint64_t &crc, const char* file_name) const;
+int      get_crc(uint64_t &crc, FILE* pfile) const;
+int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
+int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
+
 
 // Calculate for chunks of data
-uint64_t get_raw_crc(uint64_t crc, const char* buf, size_t len); //for first byte crc = crc_init (must be)
-uint64_t get_final_crc(uint64_t raw_crc);
+uint64_t get_raw_crc(const char* buf, size_t len, uint64_t crc) const; //for first byte crc = crc_init (must be)
+uint64_t get_final_crc(uint64_t raw_crc) const;
 ```
 
-More details see: **[crc_t.h](./crc_t.h)**
+More details see: **[ucrc_t.h](./ucrc_t.h)**
 
 
 <br/>
@@ -129,8 +133,8 @@ More details see: **[crc_t.h](./crc_t.h)**
 
 **To start working, perform the following steps:**
 
-1. You need to include **[crc_t.h](./crc_t.h)** file in your **.cpp** file.
-2. And add file **[crc_t.cpp](./crc_t.cpp)** to list of source files to compile.
+1. You need to include **[ucrc_t.h](./ucrc_t.h)** file in your **.cpp** file.
+2. And add file **[ucrc_t.cpp](./ucrc_t.cpp)** to list of source files to compile.
 3. Set parameters in a class (see an examples).
 
 
@@ -142,9 +146,9 @@ More details see: **[crc_t.h](./crc_t.h)**
 ```C++
 uint64_t crc;
 
-CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
-int res = ucrc.get_crc(&crc, "standard_check_file"); // res == -1 (error); res == 0 (good)
+int res = ucrc.get_crc(crc, "std_file_to_test_crc"); // res == -1 (error); res == 0 (good)
 
 if( res != -1 )
     //uses crc
@@ -158,7 +162,21 @@ char buf[len_of_buf]; //bla bla
 
 uint32_t crc;
 
-CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+
+crc = ucrc.get_crc(buf, len_of_buf);
+//uses crc
+```
+
+
+**Get CRC-ModBus for single buf:**
+
+```C++
+char buf[len_of_buf]; //bla bla
+
+uint16_t crc;
+
+uCRC_t ucrc(16, 0x8005, 0xffff, true, true, 0x0);
 
 crc = ucrc.get_crc(buf, len_of_buf);
 //uses crc
@@ -177,7 +195,7 @@ char buf2[len_of_buf2]; //bla bla
 
 uint32_t crc;
 
-CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
 crc = ucrc.get_crc_init();
 crc = ucrc.get_raw_crc(crc, buf,  len_of_buf);   //first chunk
