@@ -101,24 +101,41 @@ int uCRC_t::get_crc(uint64_t &crc, const char* file_name) const
     }
 
 
-    crc = crc_init;
-
-    char buf[4096];
-
-
     FILE *stream = fopen(file_name, "rb");
     if( stream == NULL )
         return -1; //Cant open file
 
 
-    while( !feof(stream) )
-    {
-       size_t len = fread(buf, 1, sizeof(buf), stream);
-       crc = get_raw_crc(crc, buf, len);
-    }
+    int res = get_crc(crc, stream);
 
 
     fclose(stream);
+
+
+    return res;
+}
+
+
+
+int uCRC_t::get_crc(uint64_t &crc, FILE *pfile) const
+{
+    if( !pfile )
+    {
+        errno = EINVAL;
+        return -1;
+    }
+
+
+    crc = crc_init;
+
+    char buf[4096];
+
+
+    while( !feof(pfile) )
+    {
+       size_t len = fread(buf, 1, sizeof(buf), pfile);
+       crc = get_raw_crc(crc, buf, len);
+    }
 
 
     crc = get_final_crc(crc);
