@@ -1,5 +1,5 @@
 #include "unit_tests.h"
-#include "crc_t.h"
+#include "ucrc_t.h"
 
 
 
@@ -14,7 +14,7 @@ int test_crc_t_name(struct test_info_t  *test_info)
     TEST_INIT;
 
 
-    CRC_t  crc;
+    uCRC_t  crc;
 
 
     if( crc.name != "CRC-32" )
@@ -33,7 +33,7 @@ int test_crc_t_name_2(struct test_info_t  *test_info)
 
     const char* name = "some_name";
 
-    CRC_t crc(name);
+    uCRC_t crc(name);
 
 
     if( crc.name != name )
@@ -51,7 +51,7 @@ int test_crc_t_get_bits(struct test_info_t  *test_info)
     TEST_INIT;
 
 
-    CRC_t crc(1, 0, 0, true, true, 0);
+    uCRC_t crc(1, 0, 0, true, true, 0);
 
 
     if( crc.get_bits() != 1 )
@@ -69,7 +69,7 @@ int test_crc_t_get_poly(struct test_info_t  *test_info)
     TEST_INIT;
 
 
-    CRC_t crc(1, 123, 0, true, true, 0);
+    uCRC_t crc(1, 123, 0, true, true, 0);
 
 
     if( crc.get_poly() != 123 )
@@ -87,7 +87,7 @@ int test_crc_t_get_init(struct test_info_t  *test_info)
     TEST_INIT;
 
 
-    CRC_t crc(1, 0, 1234, true, true, 0);
+    uCRC_t crc(1, 0, 1234, true, true, 0);
 
 
     if( crc.get_init() != 1234 )
@@ -105,7 +105,7 @@ int test_crc_t_get_xor_out(struct test_info_t  *test_info)
     TEST_INIT;
 
 
-    CRC_t crc(1, 0, 0, true, true, 1000);
+    uCRC_t crc(1, 0, 0, true, true, 1000);
 
 
     if( crc.get_xor_out() != 1000 )
@@ -123,7 +123,7 @@ int test_crc_t_get_ref_in(struct test_info_t  *test_info)
     TEST_INIT;
 
 
-    CRC_t crc(1, 0, 0, true, true, 0);
+    uCRC_t crc(1, 0, 0, true, true, 0);
 
 
     if( crc.get_ref_in() != true )
@@ -141,7 +141,7 @@ int test_crc_t_get_ref_out(struct test_info_t  *test_info)
     TEST_INIT;
 
 
-    CRC_t crc(1, 0, 0, true, true, 0);
+    uCRC_t crc(1, 0, 0, true, true, 0);
 
 
     if( crc.get_ref_out() != true )
@@ -160,7 +160,7 @@ int test_crc_t_set_bits(struct test_info_t  *test_info)
 
     int i, res;
 
-    CRC_t crc(1, 0, 0, true, true, 0);
+    uCRC_t crc(1, 0, 0, true, true, 0);
 
 
     if( crc.get_bits() != 1 )
@@ -208,7 +208,7 @@ int test_crc3(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(3, 0x3, 0x7, true, true, 0x0);
+    uCRC_t ucrc(3, 0x3, 0x7, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x6 )
@@ -227,7 +227,7 @@ int test_crc4(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(4, 0x3, 0x0, false, false, 0x0);
+    uCRC_t ucrc(4, 0x3, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xE )
@@ -247,7 +247,7 @@ int test_crc4_2(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(4, 0x3, 0x0, true, true, 0x0);
+    uCRC_t ucrc(4, 0x3, 0x0, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x7 )
@@ -267,7 +267,7 @@ int test_crc5(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(5, 0x09, 0x09, false, false, 0x0);
+    uCRC_t ucrc(5, 0x09, 0x09, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x0 )
@@ -287,7 +287,7 @@ int test_crc5_2(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(5, 0x15, 0x00, true, true, 0x0);
+    uCRC_t ucrc(5, 0x15, 0x00, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x07 )
@@ -307,7 +307,7 @@ int test_crc5_3(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(5, 0x05, 0x1f, true, true, 0x1f);
+    uCRC_t ucrc(5, 0x05, 0x1f, true, true, 0x1f);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x19 )
@@ -327,7 +327,7 @@ int test_crc6(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(6, 0x27, 0x3f, false, false, 0x0);
+    uCRC_t ucrc(6, 0x27, 0x3f, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x0d )
@@ -347,7 +347,7 @@ int test_crc6_2(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(6, 0x07, 0x3f, false, false, 0x0);
+    uCRC_t ucrc(6, 0x07, 0x3f, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x3b )
@@ -367,7 +367,7 @@ int test_crc6_3(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(6, 0x19, 0x0, true, true, 0x0);
+    uCRC_t ucrc(6, 0x19, 0x0, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x26 )
@@ -387,7 +387,7 @@ int test_crc6_4(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(6, 0x03, 0x0, true, true, 0x0);
+    uCRC_t ucrc(6, 0x03, 0x0, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x06 )
@@ -407,7 +407,7 @@ int test_crc7(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(7, 0x09, 0x0, false, false, 0x0);
+    uCRC_t ucrc(7, 0x09, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x75 )
@@ -427,7 +427,7 @@ int test_crc7_2(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(7, 0x4f, 0x7f, true, true, 0x0);
+    uCRC_t ucrc(7, 0x4f, 0x7f, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x53 )
@@ -446,7 +446,7 @@ int test_crc8(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x31, 0xFF, false, false, 0x00);
+    uCRC_t ucrc(8, 0x31, 0xFF, false, false, 0x00);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xF7 )
@@ -466,7 +466,7 @@ int test_crc8_2(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x07, 0x0, false, false, 0x0);
+    uCRC_t ucrc(8, 0x07, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xF4 )
@@ -486,7 +486,7 @@ int test_crc8_3(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x9b, 0xff, false, false, 0x0);
+    uCRC_t ucrc(8, 0x9b, 0xff, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xDA )
@@ -506,7 +506,7 @@ int test_crc8_4(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x39, 0x0, true, true, 0x0);
+    uCRC_t ucrc(8, 0x39, 0x0, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x15 )
@@ -526,7 +526,7 @@ int test_crc8_5(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0xd5, 0x0, false, false, 0x0);
+    uCRC_t ucrc(8, 0xd5, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xBC )
@@ -546,7 +546,7 @@ int test_crc8_6(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x1d, 0xff, true, true, 0x0);
+    uCRC_t ucrc(8, 0x1d, 0xff, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x97 )
@@ -566,7 +566,7 @@ int test_crc8_7(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x1d, 0xfd, false, false, 0x0);
+    uCRC_t ucrc(8, 0x1d, 0xfd, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x7E )
@@ -586,7 +586,7 @@ int test_crc8_8(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x07, 0x00, false, false, 0x55);
+    uCRC_t ucrc(8, 0x07, 0x00, false, false, 0x55);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xA1 )
@@ -606,7 +606,7 @@ int test_crc8_9(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x31, 0x00, true, true, 0x0);
+    uCRC_t ucrc(8, 0x31, 0x00, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xA1 )
@@ -626,7 +626,7 @@ int test_crc8_10(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x07, 0xff, true, true, 0x0);
+    uCRC_t ucrc(8, 0x07, 0xff, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xD0 )
@@ -646,7 +646,7 @@ int test_crc8_11(struct test_info_t  *test_info)
 
     uint8_t crc;
 
-    CRC_t ucrc(8, 0x9b, 0x00, true, true, 0x0);
+    uCRC_t ucrc(8, 0x9b, 0x00, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x25 )
@@ -666,7 +666,7 @@ int test_crc10(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(10, 0x233, 0x0, false, false, 0x0);
+    uCRC_t ucrc(10, 0x233, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x199 )
@@ -686,7 +686,7 @@ int test_crc10_2(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(10, 0x3d9, 0x3ff, false, false, 0x0);
+    uCRC_t ucrc(10, 0x3d9, 0x3ff, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x233 )
@@ -706,7 +706,7 @@ int test_crc11(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(11, 0x385, 0x01a, false, false, 0x0);
+    uCRC_t ucrc(11, 0x385, 0x01a, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x5A3 )
@@ -726,7 +726,7 @@ int test_crc12(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(12, 0x80f, 0x0, false, true, 0x0);
+    uCRC_t ucrc(12, 0x80f, 0x0, false, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xDAF )
@@ -746,7 +746,7 @@ int test_crc12_2(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(12, 0xf13, 0xfff, false, false, 0x0);
+    uCRC_t ucrc(12, 0xf13, 0xfff, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xD4D )
@@ -766,7 +766,7 @@ int test_crc12_3(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(12, 0x80f, 0x0, false, false, 0x0);
+    uCRC_t ucrc(12, 0x80f, 0x0, false, false, 0x0);
 
 
     crc = ucrc.get_crc("123456789", 9);
@@ -787,7 +787,7 @@ int test_crc13(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(13, 0x1cf5, 0x0, false, false, 0x0);
+    uCRC_t ucrc(13, 0x1cf5, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x04FA )
@@ -807,7 +807,7 @@ int test_crc14(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(14, 0x0805, 0x0, true, true, 0x0);
+    uCRC_t ucrc(14, 0x0805, 0x0, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x082D )
@@ -827,7 +827,7 @@ int test_crc15(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(15, 0x4599, 0x0, false, false, 0x0);
+    uCRC_t ucrc(15, 0x4599, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x059E )
@@ -847,7 +847,7 @@ int test_crc15_2(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(15, 0x6815, 0x0, false, false, 0x1);
+    uCRC_t ucrc(15, 0x6815, 0x0, false, false, 0x1);
 
 
     crc = ucrc.get_crc("123456789", 9);
@@ -868,7 +868,7 @@ int test_crc16(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x8005, 0x0, true, true, 0x0);
+    uCRC_t ucrc(16, 0x8005, 0x0, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xbb3d )
@@ -888,7 +888,7 @@ int test_crc16_2(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0x1d0f, false, false, 0x0);
+    uCRC_t ucrc(16, 0x1021, 0x1d0f, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xe5cc )
@@ -908,7 +908,7 @@ int test_crc16_3(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x8005, 0x0, false, false, 0x0);
+    uCRC_t ucrc(16, 0x8005, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xfee8 )
@@ -928,7 +928,7 @@ int test_crc16_4(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0xffff, false, false, 0x0);
+    uCRC_t ucrc(16, 0x1021, 0xffff, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x29b1 )
@@ -948,7 +948,7 @@ int test_crc16_5(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0xc867, 0xffff, false, false, 0x0);
+    uCRC_t ucrc(16, 0xc867, 0xffff, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x4c06 )
@@ -968,7 +968,7 @@ int test_crc16_6(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x8005, 0x800d, false, false, 0x0);
+    uCRC_t ucrc(16, 0x8005, 0x800d, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x9ecf )
@@ -988,7 +988,7 @@ int test_crc16_7(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x0589, 0x0, false, false, 0x0001);
+    uCRC_t ucrc(16, 0x0589, 0x0, false, false, 0x0001);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x007e )
@@ -1008,7 +1008,7 @@ int test_crc16_8(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x0589, 0x0, false, false, 0x0);
+    uCRC_t ucrc(16, 0x0589, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x007f )
@@ -1028,7 +1028,7 @@ int test_crc16_9(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x3d65, 0x0, true, true, 0xffff);
+    uCRC_t ucrc(16, 0x3d65, 0x0, true, true, 0xffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xea82 )
@@ -1048,7 +1048,7 @@ int test_crc16_10(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x3d65, 0x0, false, false, 0xffff);
+    uCRC_t ucrc(16, 0x3d65, 0x0, false, false, 0xffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xc2b7 )
@@ -1068,7 +1068,7 @@ int test_crc16_11(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0xffff, false, false, 0xffff);
+    uCRC_t ucrc(16, 0x1021, 0xffff, false, false, 0xffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xd64e )
@@ -1088,7 +1088,7 @@ int test_crc16_12(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x8005, 0x0, true, true, 0xffff);
+    uCRC_t ucrc(16, 0x8005, 0x0, true, true, 0xffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x44c2 )
@@ -1108,7 +1108,7 @@ int test_crc16_13(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0xffff, true, true, 0x0);
+    uCRC_t ucrc(16, 0x1021, 0xffff, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x6f91 )
@@ -1128,7 +1128,7 @@ int test_crc16_14(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0xb2aa, true, true, 0x0);
+    uCRC_t ucrc(16, 0x1021, 0xb2aa, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x63d0 )
@@ -1148,7 +1148,7 @@ int test_crc16_15(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x8bb7, 0x0, false, false, 0x0);
+    uCRC_t ucrc(16, 0x8bb7, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xd0db )
@@ -1168,7 +1168,7 @@ int test_crc16_16(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0xa097, 0x0, false, false, 0x0);
+    uCRC_t ucrc(16, 0xa097, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x0fb3 )
@@ -1188,7 +1188,7 @@ int test_crc16_17(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0x89ec, true, true, 0x0);
+    uCRC_t ucrc(16, 0x1021, 0x89ec, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x26b1 )
@@ -1208,7 +1208,7 @@ int test_crc16_18(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x8005, 0xffff, true, true, 0xffff);
+    uCRC_t ucrc(16, 0x8005, 0xffff, true, true, 0xffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xb4c8 )
@@ -1228,7 +1228,7 @@ int test_crc16_19(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0xc6c6, true, true, 0x0);
+    uCRC_t ucrc(16, 0x1021, 0xc6c6, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xbf05 )
@@ -1248,7 +1248,7 @@ int test_crc16_20(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0x0, true, true, 0x0);
+    uCRC_t ucrc(16, 0x1021, 0x0, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x2189 )
@@ -1268,7 +1268,7 @@ int test_crc16_21(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x8005, 0xffff, true, true, 0x0);
+    uCRC_t ucrc(16, 0x8005, 0xffff, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x4b37 )
@@ -1288,7 +1288,7 @@ int test_crc16_22(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0xffff, true, true, 0xffff);
+    uCRC_t ucrc(16, 0x1021, 0xffff, true, true, 0xffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x906e )
@@ -1308,7 +1308,7 @@ int test_crc16_23(struct test_info_t  *test_info)
 
     uint16_t crc;
 
-    CRC_t ucrc(16, 0x1021, 0x0, false, false, 0x0);
+    uCRC_t ucrc(16, 0x1021, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x31c3 )
@@ -1328,7 +1328,7 @@ int test_crc24(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(24, 0x864cfb, 0xb704ce, false, false, 0x0);
+    uCRC_t ucrc(24, 0x864cfb, 0xb704ce, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x21cf02 )
@@ -1348,7 +1348,7 @@ int test_crc24_2(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(24, 0x5d6dcb, 0xfedcba, false, false, 0x0);
+    uCRC_t ucrc(24, 0x5d6dcb, 0xfedcba, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x7979bd )
@@ -1368,7 +1368,7 @@ int test_crc24_3(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(24, 0x5d6dcb, 0xabcdef, false, false, 0x0);
+    uCRC_t ucrc(24, 0x5d6dcb, 0xabcdef, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x1f23b8 )
@@ -1388,7 +1388,7 @@ int test_crc31(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(31, 0x04c11db7, 0x7fffffff, false, false, 0x7fffffff);
+    uCRC_t ucrc(31, 0x04c11db7, 0x7fffffff, false, false, 0x7fffffff);
 
 
     crc = ucrc.get_crc("123456789", 9);
@@ -1409,7 +1409,7 @@ int test_crc32(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xCBF43926 )
@@ -1429,7 +1429,7 @@ int test_crc32_2(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0x04c11db7, 0xFFFFFFFF, false, false, 0xFFFFFFFF);
+    uCRC_t ucrc(32, 0x04c11db7, 0xFFFFFFFF, false, false, 0xFFFFFFFF);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xfc891918 )
@@ -1449,7 +1449,7 @@ int test_crc32_3(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0x1edc6f41, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    uCRC_t ucrc(32, 0x1edc6f41, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xe3069283 )
@@ -1469,7 +1469,7 @@ int test_crc32_4(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0xa833982b, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    uCRC_t ucrc(32, 0xa833982b, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x87315576 )
@@ -1489,7 +1489,7 @@ int test_crc32_5(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0x04c11db7, 0xFFFFFFFF, false, false, 0x0);
+    uCRC_t ucrc(32, 0x04c11db7, 0xFFFFFFFF, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x0376e6e7 )
@@ -1509,7 +1509,7 @@ int test_crc32_6(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0x04c11db7, 0x0, false, false, 0xffffffff);
+    uCRC_t ucrc(32, 0x04c11db7, 0x0, false, false, 0xffffffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x765e7680 )
@@ -1529,7 +1529,7 @@ int test_crc32_7(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0x814141ab, 0x0, false, false, 0x0);
+    uCRC_t ucrc(32, 0x814141ab, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x3010bf7f )
@@ -1549,7 +1549,7 @@ int test_crc32_8(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0x04c11db7, 0xffffffff, true, true, 0x0);
+    uCRC_t ucrc(32, 0x04c11db7, 0xffffffff, true, true, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x340bc6d9 )
@@ -1569,7 +1569,7 @@ int test_crc32_9(struct test_info_t  *test_info)
 
     uint32_t crc;
 
-    CRC_t ucrc(32, 0x000000af, 0x0, false, false, 0x0);
+    uCRC_t ucrc(32, 0x000000af, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xbd0be338 )
@@ -1589,7 +1589,7 @@ int test_crc40(struct test_info_t  *test_info)
 
     uint64_t crc;
 
-    CRC_t ucrc(40, 0x0004820009, 0x0, false, false, 0xffffffffff);
+    uCRC_t ucrc(40, 0x0004820009, 0x0, false, false, 0xffffffffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xd4164fc646 )
@@ -1609,7 +1609,7 @@ int test_crc64(struct test_info_t  *test_info)
 
     uint64_t crc;
 
-    CRC_t ucrc(64, 0x42f0e1eba9ea3693, 0x0, false, false, 0x0);
+    uCRC_t ucrc(64, 0x42f0e1eba9ea3693, 0x0, false, false, 0x0);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x6c40df5f0b497347 )
@@ -1630,7 +1630,7 @@ int test_crc64_2(struct test_info_t  *test_info)
 
     uint64_t crc;
 
-    CRC_t ucrc(64, 0x42f0e1eba9ea3693, 0xffffffffffffffff, false, false, 0xffffffffffffffff);
+    uCRC_t ucrc(64, 0x42f0e1eba9ea3693, 0xffffffffffffffff, false, false, 0xffffffffffffffff);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x62ec59e3f1a4f00a )
@@ -1651,7 +1651,7 @@ int test_crc64_3(struct test_info_t  *test_info)
 
     uint64_t crc;
 
-    CRC_t ucrc(64, 0x42f0e1eba9ea3693, 0xFFFFFFFFFFFFFFFF, true, true, 0xFFFFFFFFFFFFFFFF);
+    uCRC_t ucrc(64, 0x42f0e1eba9ea3693, 0xFFFFFFFFFFFFFFFF, true, true, 0xFFFFFFFFFFFFFFFF);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0x995dc9bbdf1939fa )
@@ -1674,7 +1674,7 @@ int test_crc32_file(struct test_info_t  *test_info)
 
     uint64_t crc;
 
-    CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     int res = ucrc.get_crc(&crc, "standard_check_file");
 
@@ -1694,7 +1694,7 @@ int test_crc32_file_2(struct test_info_t  *test_info)
 
     uint64_t crc;
 
-    CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     int res = ucrc.get_crc(&crc, ""); //no file
 
@@ -1721,7 +1721,7 @@ int test_crc32_cunks(struct test_info_t  *test_info)
     char buf[]  = "1234";
     char buf2[] = "56789";
 
-    CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     crc = ucrc.get_crc_init();
     crc = ucrc.get_raw_crc(crc, buf, 4);
@@ -1745,7 +1745,7 @@ int test_dif_crc(struct test_info_t  *test_info)
 
     uint64_t crc;
 
-    CRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
     crc = ucrc.get_crc("123456789", 9);
     if( crc != 0xCBF43926 )

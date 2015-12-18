@@ -25,7 +25,7 @@ clean:
 
 .PHONY: $(TESTS)
 $(TESTS):
-	$(CPP)  $@.cpp crc_t.cpp unit_tests.cpp -o $@  $(CPPFLAGS)
+	$(CPP)  $@.cpp ucrc_t.cpp unit_tests.cpp -o $@  $(CPPFLAGS)
 	@echo "  ---- Compiled $@ ----"
 	@echo ""
 	@echo "  ---- Start tests ----"

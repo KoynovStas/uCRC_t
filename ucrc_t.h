@@ -1,5 +1,5 @@
 /*
- * crc_t.h
+ * ucrc_t.h
  *
  *
  * Copyright (c) 2015, Koynov Stas - skojnov@yandex.ru
@@ -31,8 +31,8 @@
  *
  */
 
-#ifndef CRC_T_H
-#define CRC_T_H
+#ifndef UCRC_T_H
+#define UCRC_T_H
 
 #include <stdint.h>
 #include <string>
@@ -41,26 +41,26 @@
 
 
 
-class CRC_t
+class uCRC_t
 {
 
     public:
 
-        explicit CRC_t(const std::string Name = "CRC-32",
-                       uint8_t  Bits   = 32,
-                       uint64_t Poly   = 0x04c11db7,
-                       uint64_t Init   = 0xffffffff,
-                       bool     RefIn  = true,
-                       bool     RefOut = true,
-                       uint64_t XorOut = 0xffffffff);
+        explicit uCRC_t(const std::string Name = "CRC-32",
+                        uint8_t  Bits   = 32,
+                        uint64_t Poly   = 0x04c11db7,
+                        uint64_t Init   = 0xffffffff,
+                        bool     RefIn  = true,
+                        bool     RefOut = true,
+                        uint64_t XorOut = 0xffffffff);
 
 
-        explicit CRC_t(uint8_t  Bits,
-                       uint64_t Poly,
-                       uint64_t Init,
-                       bool     RefIn,
-                       bool     RefOut,
-                       uint64_t XorOut);
+        explicit uCRC_t(uint8_t  Bits,
+                        uint64_t Poly,
+                        uint64_t Init,
+                        bool     RefIn,
+                        bool     RefOut,
+                        uint64_t XorOut);
 
 
         std::string name;
@@ -89,8 +89,8 @@ class CRC_t
 
 
         // Calculate methods
-        uint64_t get_crc(const char* buf, size_t len)  const;
-        int      get_crc(uint64_t *crc, const char *file_name)  const;
+        uint64_t get_crc(const char* buf, size_t len) const;
+        int      get_crc(uint64_t *crc, const char *file_name) const;
 
         // Calculate for chunks of data
         uint64_t get_raw_crc(uint64_t crc, const char* buf, size_t len) const; //for first byte crc = crc_init (must be)
@@ -123,4 +123,4 @@ class CRC_t
 
 
 
-#endif // CRC_T_H
+#endif // UCRC_T_H

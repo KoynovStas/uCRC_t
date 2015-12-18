@@ -1,5 +1,5 @@
 /*
- * crc_t.cpp
+ * ucrc_t.cpp
  *
  *
  * Copyright (c) 2015, Koynov Stas - skojnov@yandex.ru
@@ -31,13 +31,13 @@
  *
  */
 
-#include "crc_t.h"
+#include "ucrc_t.h"
 #include <cstdio>
 
 
 
 
-CRC_t::CRC_t(const std::string Name, uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut)
+uCRC_t::uCRC_t(const std::string Name, uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut)
 {
     name    = Name;
     bits    = Bits;
@@ -53,7 +53,7 @@ CRC_t::CRC_t(const std::string Name, uint8_t Bits, uint64_t Poly, uint64_t Init,
 
 
 
-CRC_t::CRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut)
+uCRC_t::uCRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut)
 {
     bits    = Bits;
     poly    = Poly;
@@ -68,7 +68,7 @@ CRC_t::CRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut
 
 
 
-int CRC_t::set_bits(uint8_t new_bits)
+int uCRC_t::set_bits(uint8_t new_bits)
 {
     if( (new_bits < 1) || (new_bits > 64) )
         return -1; //error
@@ -83,7 +83,7 @@ int CRC_t::set_bits(uint8_t new_bits)
 
 
 
-uint64_t CRC_t::get_crc(const char *buf, size_t len) const
+uint64_t uCRC_t::get_crc(const char *buf, size_t len) const
 {
     uint64_t crc = get_raw_crc(crc_init, buf, len);
 
@@ -92,7 +92,7 @@ uint64_t CRC_t::get_crc(const char *buf, size_t len) const
 
 
 
-int CRC_t::get_crc(uint64_t *crc, const char *file_name) const
+int uCRC_t::get_crc(uint64_t *crc, const char *file_name) const
 {
     if( !file_name || !crc )
         return -1; //Bad param
@@ -125,7 +125,7 @@ int CRC_t::get_crc(uint64_t *crc, const char *file_name) const
 
 
 
-uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len) const
+uint64_t uCRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len) const
 {
     if(bits > 8)
     {
@@ -152,7 +152,7 @@ uint64_t CRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len) const
 
 
 
-uint64_t CRC_t::get_final_crc(uint64_t raw_crc) const
+uint64_t uCRC_t::get_final_crc(uint64_t raw_crc) const
 {
     if(ref_out^ref_in) raw_crc = reflect(raw_crc, bits);
 
@@ -164,7 +164,7 @@ uint64_t CRC_t::get_final_crc(uint64_t raw_crc) const
 
 
 
-uint64_t CRC_t::reflect(uint64_t data, uint8_t num_bits) const
+uint64_t uCRC_t::reflect(uint64_t data, uint8_t num_bits) const
 {
     uint64_t reflection = 0;
     uint64_t one = 1;
@@ -182,7 +182,7 @@ uint64_t CRC_t::reflect(uint64_t data, uint8_t num_bits) const
 
 
 
-void CRC_t::init_crc_table()
+void uCRC_t::init_crc_table()
 {
     int i;
     uint64_t crc;
@@ -220,7 +220,7 @@ void CRC_t::init_crc_table()
 
 
 
-void CRC_t::init_class()
+void uCRC_t::init_class()
 {
     top_bit  = (uint64_t)1 << (bits - 1);
     crc_mask = ( (top_bit - 1) << 1) | 1;
