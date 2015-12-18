@@ -1676,7 +1676,7 @@ int test_crc32_file(struct test_info_t  *test_info)
 
     uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
-    int res = ucrc.get_crc(&crc, "standard_check_file");
+    int res = ucrc.get_crc(&crc, "std_file_to_test_crc");
 
     if( (res != 0) ||  (crc != 0xCBF43926) )
         return TEST_BROKEN;
