@@ -90,7 +90,7 @@ class uCRC_t
 
         // Calculate methods
         uint64_t get_crc(const char* buf, size_t len) const;
-        int      get_crc(uint64_t *crc, const char *file_name) const;
+        int      get_crc(uint64_t &crc, const char* file_name) const;
 
         // Calculate for chunks of data
         uint64_t get_raw_crc(uint64_t crc, const char* buf, size_t len) const; //for first byte crc = crc_init (must be)

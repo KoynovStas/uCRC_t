@@ -33,6 +33,7 @@
 
 #include "ucrc_t.h"
 #include <cstdio>
+#include <errno.h>
 
 
 
@@ -81,7 +82,7 @@ int uCRC_t::set_bits(uint8_t new_bits)
 
 
 
-uint64_t uCRC_t::get_crc(const char *buf, size_t len) const
+uint64_t uCRC_t::get_crc(const char* buf, size_t len) const
 {
     uint64_t crc = get_raw_crc(crc_init, buf, len);
 
@@ -90,12 +91,17 @@ uint64_t uCRC_t::get_crc(const char *buf, size_t len) const
 
 
 
-int uCRC_t::get_crc(uint64_t *crc, const char *file_name) const
+int uCRC_t::get_crc(uint64_t &crc, const char* file_name) const
 {
-    if( !file_name || !crc )
-        return -1; //Bad param
 
-    *crc = crc_init;
+    if( !file_name )
+    {
+        errno = EINVAL;
+        return -1;
+    }
+
+
+    crc = crc_init;
 
     char buf[4096];
 
@@ -108,14 +114,14 @@ int uCRC_t::get_crc(uint64_t *crc, const char *file_name) const
     while( !feof(stream) )
     {
        size_t len = fread(buf, 1, sizeof(buf), stream);
-       *crc = get_raw_crc(*crc, buf, len);
+       crc = get_raw_crc(crc, buf, len);
     }
 
 
     fclose(stream);
 
 
-    *crc = get_final_crc(*crc);
+    crc = get_final_crc(crc);
 
 
     return 0; //good  job
@@ -123,7 +129,7 @@ int uCRC_t::get_crc(uint64_t *crc, const char *file_name) const
 
 
 
-uint64_t uCRC_t::get_raw_crc(uint64_t crc, const char *buf, size_t len) const
+uint64_t uCRC_t::get_raw_crc(uint64_t crc, const char* buf, size_t len) const
 {
     if(bits > 8)
     {
