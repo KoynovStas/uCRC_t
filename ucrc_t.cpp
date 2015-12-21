@@ -143,7 +143,9 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile, void *buf, size_t size_buf) cons
     }
 
 
-    crc = crc_init;
+    crc          = init;
+    long cur_pos = ftell(pfile);
+    rewind(pfile);
 
 
     while( !feof(pfile) )
@@ -151,6 +153,9 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile, void *buf, size_t size_buf) cons
        size_t len = fread(buf, 1, size_buf, pfile);
        crc = get_raw_crc((char *)buf, len, crc);
     }
+
+
+    fseek(pfile, cur_pos, SEEK_SET);
 
 
     crc = get_final_crc(crc);
