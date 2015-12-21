@@ -11,7 +11,16 @@ uCRC_t is universal C++ class for calculation CRC sizes(width) 1-64 bits.
  - The code uses only the standard **C++03 not C++11** -> This allows you to use the class in the oldest projects with older compilers.
  - In the code not uses the library boost.
  - The code has no dependencies.
+ - You can change the parameters of the algorithm CRC in Run-Time, see set_xxx methods.
  - For **any** bit-depth (width) of CRC will be use the standard table method for calculation. Will be calculated standart table for byte (table size 256 elements)
+
+
+#### Limitations of the implementation:
+
+- This class is universal, but it leads to extra work because the data type is uint64_t. This is not optimal.
+
+
+If you don't need such universality, you can use a more optimized template for your algorithm see:[CRC_CPP_Template](https://github.com/KoynovStas/CRC_CPP_Template)
 
 
 Class parameters is the standard Specifications algorithms CRC as described in Ross N. Williams [A PAINLESS GUIDE TO CRC ERROR DETECTION ALGORITHMS.](http://www.ross.net/crc/download/crc_v3.txt)
@@ -170,8 +179,8 @@ int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_bu
 int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
 ```
 
-The method which uses FILE* does not set the file pointer(pos) to the beginning. 
-After work, the file pointer(pos) points to the end of the file.
+The method which uses FILE* set the file pointer(pos) to the beginning. 
+After work, the file position is returned to the original position before the work function get_crc().
 
 
 **Get CRC-32 for single buf:**
