@@ -36,6 +36,10 @@ crc_test
 *.*~
 
 
+# gcc asm files
+*.s
+*.S
+
 
 # Configs for QT_Creator (I use QT_Creator as IDE)
 *.config
