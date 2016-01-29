@@ -38,7 +38,7 @@ $(TESTS):
 .PHONY: asm
 asm:
 	$(CPP)  crc_test.cpp $(CPPFLAGS) -S
-	$(CPP)  crc_t.cpp $(CPPFLAGS) -S
+	$(CPP)  ucrc_t.cpp $(CPPFLAGS) -S
 
 
 
