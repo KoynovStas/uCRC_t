@@ -472,31 +472,45 @@ int test_crc32_file_2(struct test_info_t  *test_info)
 
 
 
-int test_crc32_cunks(struct test_info_t  *test_info)
+int test_crc_for_cunks(struct test_info_t  *test_info)
 {
 
     TEST_INIT;
 
-    uint32_t crc;
+    uint64_t crc;
 
     char buf[]  = "1234";
     char buf2[] = "56789";
 
-    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
-
-    crc = ucrc.get_crc_init();
-    crc = ucrc.get_raw_crc(buf, 4, crc);
-    crc = ucrc.get_raw_crc(buf2, 5, crc);
-    crc = ucrc.get_final_crc(crc);
+    const struct CRC_Spec_Info *spec = CRC_List;
 
 
-    if( crc != 0xCBF43926 )
-        return TEST_BROKEN;
+
+    while( spec->name )
+    {
+
+        uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
+
+
+        crc = ucrc.get_crc_init();
+        crc = ucrc.get_raw_crc(buf,  4, crc);
+        crc = ucrc.get_raw_crc(buf2, 5, crc);
+        crc = ucrc.get_final_crc(crc);
+
+        if( crc != spec->check )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        spec++;
+    }
 
 
     return TEST_PASSED;
 }
-
 
 
 
@@ -525,7 +539,7 @@ ptest_func tests[] =
     test_crc_std_check_file,
     test_crc32_file_2,
 
-    test_crc32_cunks,
+    test_crc_for_cunks,
 };
 
 
