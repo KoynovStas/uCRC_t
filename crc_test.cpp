@@ -306,12 +306,25 @@ int test_crc_t_get_ref_in(struct test_info_t  *test_info)
 
     TEST_INIT;
 
+    const struct CRC_Spec_Info *spec = CRC_List;
 
-    uCRC_t crc(1, 0, 0, true, true, 0);
+
+    while( spec->name )
+    {
+
+        uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
 
-    if( crc.get_ref_in() != true )
-        return TEST_BROKEN;
+        if( ucrc.get_ref_in() != spec->ref_in )
+        {
+            std::cout << std::boolalpha;
+            std::cout << "For CRC: " << spec->name <<  " ref_in must be: " << spec->ref_in << " but get: " << ucrc.get_ref_in() << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        spec++;
+    }
 
 
     return TEST_PASSED;
