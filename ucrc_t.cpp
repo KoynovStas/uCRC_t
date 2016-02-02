@@ -146,7 +146,7 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile, void *buf, size_t size_buf) cons
     }
 
 
-    crc          = init;
+    crc          = crc_init;
     long cur_pos = ftell(pfile);
     rewind(pfile);
 
