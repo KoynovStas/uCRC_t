@@ -1,7 +1,140 @@
+#include <iostream>
 #include "unit_tests.h"
 #include "ucrc_t.h"
 
 
+
+
+
+
+struct CRC_Spec_Info
+{
+    const char *name;
+    uint8_t     bits;
+    uint64_t    poly;
+    uint64_t    init;
+    bool        ref_in;
+    bool        ref_out;
+    uint64_t    xor_out;
+    uint64_t    check;
+};
+
+
+
+
+// Catalogue of parametrised CRC algorithms
+// more see http://reveng.sourceforge.net/crc-catalogue/
+const CRC_Spec_Info  CRC_List[] =
+{
+    // CRC-3
+    { "CRC-3/ROHC", 3, 0x3, 0x7, true, true, 0x0, 0x6 },
+
+    // CRC-4
+    { "CRC-4/ITU", 4, 0x3, 0x0, true, true, 0x0, 0x7 },
+
+    // CRC-5
+    { "CRC-5/EPC", 5, 0x09, 0x09, false, false, 0x00, 0x00 },
+    { "CRC-5/ITU", 5, 0x15, 0x00, true,  true,  0x00, 0x07 },
+    { "CRC-5/USB", 5, 0x05, 0x1F, true,  true,  0x1F, 0x19 },
+
+    // CRC-6
+    { "CRC-6/CDMA2000-A", 6, 0x27, 0x3F, false, false, 0x0, 0x0D },
+    { "CRC-6/CDMA2000-B", 6, 0x07, 0x3F, false, false, 0x0, 0x3B },
+    { "CRC-6/DARC",       6, 0x19, 0x00, true,  true,  0x0, 0x26 },
+    { "CRC-6/ITU",        6, 0x03, 0x00, true,  true,  0x0, 0x06 },
+
+    // CRC-7
+    { "CRC-7",      7, 0x9,  0x0,  false, false, 0x0, 0x75 },
+    { "CRC-7/ROHC", 7, 0x4F, 0x7F, true,  true,  0x0, 0x53 },
+
+    // CRC-8
+    { "CRC-8",          8, 0x7,  0x0,  false, false, 0x0, 0xF4 },
+    { "CRC-8/CDMA2000", 8, 0x9B, 0xFF, false, false, 0x0, 0xDA },
+    { "CRC-8/DARC",     8, 0x39, 0x0,  true,  true,  0x0, 0x15 },
+    { "CRC-8/DVB-S2",   8, 0xD5, 0x0,  false, false, 0x0, 0xBC },
+    { "CRC-8/EBU",      8, 0x1D, 0xFF, true,  true,  0x0, 0x97 },
+    { "CRC-8/I-CODE",   8, 0x1D, 0xFD, false, false, 0x0, 0x7E },
+    { "CRC-8/ITU",      8, 0x7,  0x0,  false, false, 0x55,0xA1 },
+    { "CRC-8/MAXIM",    8, 0x31, 0x0,  true,  true,  0x0, 0xA1 },
+    { "CRC-8/ROHC",     8, 0x7,  0xFF, true,  true,  0x0, 0xD0 },
+    { "CRC-8/WCDMA",    8, 0x9B, 0x0,  true,  true,  0x0, 0x25 },
+
+    // CRC-10
+    { "CRC-10",          10, 0x233, 0x0,   false, false, 0x0, 0x199 },
+    { "CRC-10/CDMA2000", 10, 0x3D9, 0x3FF, false, false, 0x0, 0x233 },
+
+    // CRC-11
+    { "CRC-11", 11, 0x385, 0x1A, false, false, 0x0, 0x5A3 },
+
+    // CRC-12
+    { "CRC-12/3GPP",     12, 0x80F, 0x0,   false, true,  0x0, 0xDAF },
+    { "CRC-12/CDMA2000", 12, 0xF13, 0xFFF, false, false, 0x0, 0xD4D },
+    { "CRC-12/DECT",     12, 0x80F, 0x0,   false, false, 0x0, 0xF5B },
+
+    // CRC-13
+    { "CRC-13/BBC", 13, 0x1CF5, 0x0, false, false, 0x0, 0x4FA },
+
+    // CRC-14
+    { "CRC-14/DARC", 14, 0x805, 0x0, true, true, 0x0, 0x82D },
+
+    // CRC-15
+    { "CRC-15",         15, 0x4599, 0x0, false, false, 0x0, 0x59E },
+    { "CRC-15/MPT1327", 15, 0x6815, 0x0, false, false, 0x1, 0x2566 },
+
+    // CRC-16
+    { "CRC-16/ARC",         16, 0x8005, 0x0,    true,  true,  0x0,    0xBB3D },
+    { "CRC-16/AUG-CCITT",   16, 0x1021, 0x1D0F, false, false, 0x0,    0xE5CC },
+    { "CRC-16/BUYPASS",     16, 0x8005, 0x0,    false, false, 0x0,    0xFEE8 },
+    { "CRC-16/CCITT-FALSE", 16, 0x1021, 0xFFFF, false, false, 0x0,    0x29B1 },
+    { "CRC-16/CDMA2000",    16, 0xC867, 0xFFFF, false, false, 0x0,    0x4C06 },
+    { "CRC-16/DDS-110",     16, 0x8005, 0x800D, false, false, 0x0,    0x9ECF },
+    { "CRC-16/DECT-R",      16, 0x589,  0x0,    false, false, 0x1,    0x7E },
+    { "CRC-16/DECT-X",      16, 0x589,  0x0,    false, false, 0x0,    0x7F },
+    { "CRC-16/DNP",         16, 0x3D65, 0x0,    true,  true,  0xFFFF, 0xEA82 },
+    { "CRC-16/EN-13757",    16, 0x3D65, 0x0,    false, false, 0xFFFF, 0xC2B7 },
+    { "CRC-16/GENIBUS",     16, 0x1021, 0xFFFF, false, false, 0xFFFF, 0xD64E },
+    { "CRC-16/MAXIM",       16, 0x8005, 0x0,    true,  true,  0xFFFF, 0x44C2 },
+    { "CRC-16/MCRF4XX",     16, 0x1021, 0xFFFF, true,  true,  0x0,    0x6F91 },
+    { "CRC-16/RIELLO",      16, 0x1021, 0xB2AA, true,  true,  0x0,    0x63D0 },
+    { "CRC-16/T10-DIF",     16, 0x8BB7, 0x0,    false, false, 0x0,    0xD0DB },
+    { "CRC-16/TELEDISK",    16, 0xA097, 0x0,    false, false, 0x0,    0xFB3 },
+    { "CRC-16/TMS37157",    16, 0x1021, 0x89EC, true,  true,  0x0,    0x26B1 },
+    { "CRC-16/USB",         16, 0x8005, 0xFFFF, true,  true,  0xFFFF, 0xB4C8 },
+    { "CRC-A",              16, 0x1021, 0xC6C6, true,  true,  0x0,    0xBF05 },
+    { "CRC-16/KERMIT",      16, 0x1021, 0x0,    true,  true,  0x0,    0x2189 },
+    { "CRC-16/MODBUS",      16, 0x8005, 0xFFFF, true,  true,  0x0,    0x4B37 },
+    { "CRC-16/X-25",        16, 0x1021, 0xFFFF, true,  true,  0xFFFF, 0x906E },
+    { "CRC-16/XMODEM",      16, 0x1021, 0x0,    false, false, 0x0,    0x31C3 },
+
+    // CRC-24
+    { "CRC-24",           24, 0x864CFB, 0xB704CE, false, false, 0x0, 0x21CF02 },
+    { "CRC-24/FLEXRAY-A", 24, 0x5D6DCB, 0xFEDCBA, false, false, 0x0, 0x7979BD },
+    { "CRC-24/FLEXRAY-B", 24, 0x5D6DCB, 0xABCDEF, false, false, 0x0, 0x1F23B8 },
+
+    // CRC-31
+    { "CRC-31/PHILIPS", 31, 0x4C11DB7, 0x7FFFFFFF, false, false, 0x7FFFFFFF, 0xCE9E46C },
+
+    // CRC-32
+    { "CRC-32",        32, 0x4C11DB7,  0xFFFFFFFF, true,  true,  0xFFFFFFFF, 0xCBF43926 },
+    { "CRC-32/BZIP2",  32, 0x4C11DB7,  0xFFFFFFFF, false, false, 0xFFFFFFFF, 0xFC891918 },
+    { "CRC-32C",       32, 0x1EDC6F41, 0xFFFFFFFF, true,  true,  0xFFFFFFFF, 0xE3069283 },
+    { "CRC-32D",       32, 0xA833982B, 0xFFFFFFFF, true,  true,  0xFFFFFFFF, 0x87315576 },
+    { "CRC-32/MPEG-2", 32, 0x4C11DB7,  0xFFFFFFFF, false, false, 0x0,        0x376E6E7  },
+    { "CRC-32/POSIX",  32, 0x4C11DB7,  0x0,        false, false, 0xFFFFFFFF, 0x765E7680 },
+    { "CRC-32Q",       32, 0x814141AB, 0x0,        false, false, 0x0,        0x3010BF7F },
+    { "CRC-32/JAMCRC", 32, 0x4C11DB7,  0xFFFFFFFF, true,  true,  0x0,        0x340BC6D9 },
+    { "CRC-32/XFER",   32, 0xAF,       0x0,        false, false, 0x0,        0xBD0BE338 },
+
+    // CRC-40
+    { "CRC-40/GSM", 40, 0x4820009, 0x0, false, false, 0xFFFFFFFFFF, 0xD4164FC646 },
+
+    // CRC-64
+    { "CRC-64",    64, 0x42F0E1EBA9EA3693, 0x0,                false, false, 0x0,                0x6C40DF5F0B497347 },
+    { "CRC-64/WE", 64, 0x42F0E1EBA9EA3693, 0xFFFFFFFFFFFFFFFF, false, false, 0xFFFFFFFFFFFFFFFF, 0x62EC59E3F1A4F00A },
+    { "CRC-64/XZ", 64, 0x42F0E1EBA9EA3693, 0xFFFFFFFFFFFFFFFF, true,  true,  0xFFFFFFFFFFFFFFFF, 0x995DC9BBDF1939FA },
+
+    { 0, 0, 0, 0, 0, 0, 0, 0 } // End Marker
+};
 
 
 
@@ -199,1463 +332,33 @@ int test_crc_t_set_bits(struct test_info_t  *test_info)
 //------------- tests for Calculate CRC  -------------
 
 
-
-//width=3 poly=0x3 init=0x7 refin=true refout=true xorout=0x0 check=0x6 name="CRC-3/ROHC"
-int test_crc3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(3, 0x3, 0x7, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x6 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-int test_crc4(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(4, 0x3, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xE )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=4 poly=0x3 init=0x0 refin=true refout=true xorout=0x0 check=0x7 name="CRC-4/ITU"
-int test_crc4_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(4, 0x3, 0x0, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x7 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=5 poly=0x09 init=0x09 refin=false refout=false xorout=0x00 check=0x00 name="CRC-5/EPC"
-int test_crc5(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(5, 0x09, 0x09, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x0 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=5 poly=0x15 init=0x00 refin=true refout=true xorout=0x00 check=0x07 name="CRC-5/ITU"
-int test_crc5_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(5, 0x15, 0x00, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x07 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=5 poly=0x05 init=0x1f refin=true refout=true xorout=0x1f check=0x19 name="CRC-5/USB"
-int test_crc5_3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(5, 0x05, 0x1f, true, true, 0x1f);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x19 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=6 poly=0x27 init=0x3f refin=false refout=false xorout=0x00 check=0x0d name="CRC-6/CDMA2000-A"
-int test_crc6(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(6, 0x27, 0x3f, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x0d )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=6 poly=0x07 init=0x3f refin=false refout=false xorout=0x00 check=0x3b name="CRC-6/CDMA2000-B"
-int test_crc6_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(6, 0x07, 0x3f, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x3b )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=6 poly=0x19 init=0x00 refin=true refout=true xorout=0x00 check=0x26 name="CRC-6/DARC"
-int test_crc6_3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(6, 0x19, 0x0, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x26 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=6 poly=0x03 init=0x00 refin=true refout=true xorout=0x00 check=0x06 name="CRC-6/ITU"
-int test_crc6_4(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(6, 0x03, 0x0, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x06 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=7 poly=0x09 init=0x00 refin=false refout=false xorout=0x00 check=0x75 name="CRC-7"
-int test_crc7(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(7, 0x09, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x75 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=7 poly=0x4f init=0x7f refin=true refout=true xorout=0x00 check=0x53 name="CRC-7/ROHC"
-int test_crc7_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(7, 0x4f, 0x7f, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x53 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-int test_crc8(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x31, 0xFF, false, false, 0x00);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xF7 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x07 init=0x00 refin=false refout=false xorout=0x00 check=0xf4 name="CRC-8"
-int test_crc8_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x07, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xF4 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x9b init=0xff refin=false refout=false xorout=0x00 check=0xda name="CRC-8/CDMA2000"
-int test_crc8_3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x9b, 0xff, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xDA )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x39 init=0x00 refin=true refout=true xorout=0x00 check=0x15 name="CRC-8/DARC"
-int test_crc8_4(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x39, 0x0, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x15 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0xd5 init=0x00 refin=false refout=false xorout=0x00 check=0xbc name="CRC-8/DVB-S2"
-int test_crc8_5(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0xd5, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xBC )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x1d init=0xff refin=true refout=true xorout=0x00 check=0x97 name="CRC-8/EBU"
-int test_crc8_6(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x1d, 0xff, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x97 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x1d init=0xfd refin=false refout=false xorout=0x00 check=0x7e name="CRC-8/I-CODE"
-int test_crc8_7(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x1d, 0xfd, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x7E )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x07 init=0x00 refin=false refout=false xorout=0x55 check=0xa1 name="CRC-8/ITU"
-int test_crc8_8(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x07, 0x00, false, false, 0x55);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xA1 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x31 init=0x00 refin=true refout=true xorout=0x00 check=0xa1 name="CRC-8/MAXIM"
-int test_crc8_9(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x31, 0x00, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xA1 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x07 init=0xff refin=true refout=true xorout=0x00 check=0xd0 name="CRC-8/ROHC"
-int test_crc8_10(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x07, 0xff, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xD0 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=8 poly=0x9b init=0x00 refin=true refout=true xorout=0x00 check=0x25 name="CRC-8/WCDMA"
-int test_crc8_11(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint8_t crc;
-
-    uCRC_t ucrc(8, 0x9b, 0x00, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x25 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=10 poly=0x233 init=0x000 refin=false refout=false xorout=0x000 check=0x199 name="CRC-10"
-int test_crc10(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(10, 0x233, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x199 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=10 poly=0x3d9 init=0x3ff refin=false refout=false xorout=0x000 check=0x233 name="CRC-10/CDMA2000"
-int test_crc10_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(10, 0x3d9, 0x3ff, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x233 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=11 poly=0x385 init=0x01a refin=false refout=false xorout=0x000 check=0x5a3 name="CRC-11"
-int test_crc11(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(11, 0x385, 0x01a, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x5A3 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=12 poly=0x80f init=0x000 refin=false refout=true xorout=0x000 check=0xdaf name="CRC-12/3GPP"
-int test_crc12(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(12, 0x80f, 0x0, false, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xDAF )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=12 poly=0xf13 init=0xfff refin=false refout=false xorout=0x000 check=0xd4d name="CRC-12/CDMA2000"
-int test_crc12_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(12, 0xf13, 0xfff, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xD4D )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=12 poly=0x80f init=0x000 refin=false refout=false xorout=0x000 check=0xf5b name="CRC-12/DECT"
-int test_crc12_3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(12, 0x80f, 0x0, false, false, 0x0);
-
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xF5B )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=13 poly=0x1cf5 init=0x0000 refin=false refout=false xorout=0x0000 check=0x04fa name="CRC-13/BBC"
-int test_crc13(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(13, 0x1cf5, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x04FA )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=14 poly=0x0805 init=0x0000 refin=true refout=true xorout=0x0000 check=0x082d name="CRC-14/DARC"
-int test_crc14(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(14, 0x0805, 0x0, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x082D )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=15 poly=0x4599 init=0x0000 refin=false refout=false xorout=0x0000 check=0x059e name="CRC-15"
-int test_crc15(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(15, 0x4599, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x059E )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=15 poly=0x6815 init=0x0000 refin=false refout=false xorout=0x0001 check=0x2566 name="CRC-15/MPT1327"
-int test_crc15_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(15, 0x6815, 0x0, false, false, 0x1);
-
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x2566 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x8005  init=0x0000  refin=true  refout=true  xorout=0x0000  check=0xbb3d  name="CRC-16/ARC"
-int test_crc16(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x8005, 0x0, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xbb3d )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0x1d0f  refin=false  refout=false  xorout=0x0000  check=0xe5cc  name="CRC-16/AUG-CCITT"
-int test_crc16_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0x1d0f, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xe5cc )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x8005  init=0x0000  refin=false  refout=false  xorout=0x0000  check=0xfee8  name="CRC-16/BUYPASS"
-int test_crc16_3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x8005, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xfee8 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0xffff  refin=false  refout=false  xorout=0x0000  check=0x29b1  name="CRC-16/CCITT-FALSE"
-int test_crc16_4(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0xffff, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x29b1 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0xc867  init=0xffff  refin=false  refout=false  xorout=0x0000  check=0x4c06  name="CRC-16/CDMA2000"
-int test_crc16_5(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0xc867, 0xffff, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x4c06 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x8005  init=0x800d  refin=false  refout=false  xorout=0x0000  check=0x9ecf  name="CRC-16/DDS-110"
-int test_crc16_6(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x8005, 0x800d, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x9ecf )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x0589  init=0x0000  refin=false  refout=false  xorout=0x0001  check=0x007e  name="CRC-16/DECT-R"
-int test_crc16_7(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x0589, 0x0, false, false, 0x0001);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x007e )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x0589  init=0x0000  refin=false  refout=false  xorout=0x0000  check=0x007f  name="CRC-16/DECT-X"
-int test_crc16_8(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x0589, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x007f )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x3d65  init=0x0000  refin=true  refout=true  xorout=0xffff  check=0xea82  name="CRC-16/DNP"
-int test_crc16_9(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x3d65, 0x0, true, true, 0xffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xea82 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x3d65  init=0x0000  refin=false  refout=false  xorout=0xffff  check=0xc2b7  name="CRC-16/EN-13757"
-int test_crc16_10(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x3d65, 0x0, false, false, 0xffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xc2b7 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0xffff  refin=false  refout=false  xorout=0xffff  check=0xd64e  name="CRC-16/GENIBUS"
-int test_crc16_11(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0xffff, false, false, 0xffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xd64e )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x8005  init=0x0000  refin=true  refout=true  xorout=0xffff  check=0x44c2  name="CRC-16/MAXIM"
-int test_crc16_12(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x8005, 0x0, true, true, 0xffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x44c2 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0xffff  refin=true  refout=true  xorout=0x0000  check=0x6f91  name="CRC-16/MCRF4XX"
-int test_crc16_13(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0xffff, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x6f91 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0xb2aa  refin=true  refout=true  xorout=0x0000  check=0x63d0  name="CRC-16/RIELLO"
-int test_crc16_14(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0xb2aa, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x63d0 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x8bb7  init=0x0000  refin=false  refout=false  xorout=0x0000  check=0xd0db  name="CRC-16/T10-DIF"
-int test_crc16_15(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x8bb7, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xd0db )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0xa097  init=0x0000  refin=false  refout=false  xorout=0x0000  check=0x0fb3  name="CRC-16/TELEDISK"
-int test_crc16_16(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0xa097, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x0fb3 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0x89ec  refin=true  refout=true  xorout=0x0000  check=0x26b1  name="CRC-16/TMS37157"
-int test_crc16_17(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0x89ec, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x26b1 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x8005  init=0xffff  refin=true  refout=true  xorout=0xffff  check=0xb4c8  name="CRC-16/USB"
-int test_crc16_18(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x8005, 0xffff, true, true, 0xffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xb4c8 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0xc6c6  refin=true  refout=true  xorout=0x0000  check=0xbf05  name="CRC-A"
-int test_crc16_19(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0xc6c6, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xbf05 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0x0000  refin=true  refout=true  xorout=0x0000  check=0x2189  name="CRC-16/KERMIT"
-int test_crc16_20(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0x0, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x2189 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x8005  init=0xffff  refin=true  refout=true  xorout=0x0000  check=0x4b37  name="CRC-16/MODBUS"
-int test_crc16_21(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x8005, 0xffff, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x4b37 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0xffff  refin=true  refout=true  xorout=0xffff  check=0x906e  name="CRC-16/X-25"
-int test_crc16_22(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0xffff, true, true, 0xffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x906e )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=16  poly=0x1021  init=0x0000  refin=false  refout=false  xorout=0x0000  check=0x31c3  name="XMODEM"
-int test_crc16_23(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint16_t crc;
-
-    uCRC_t ucrc(16, 0x1021, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x31c3 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=24 poly=0x864cfb init=0xb704ce refin=false refout=false xorout=0x000000 check=0x21cf02 name="CRC-24"
-int test_crc24(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(24, 0x864cfb, 0xb704ce, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x21cf02 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=24 poly=0x5d6dcb init=0xfedcba refin=false refout=false xorout=0x000000 check=0x7979bd name="CRC-24/FLEXRAY-A"
-int test_crc24_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(24, 0x5d6dcb, 0xfedcba, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x7979bd )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=24 poly=0x5d6dcb init=0xabcdef refin=false refout=false xorout=0x000000 check=0x1f23b8 name="CRC-24/FLEXRAY-B"
-int test_crc24_3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(24, 0x5d6dcb, 0xabcdef, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x1f23b8 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=31 poly=0x04c11db7 init=0x7fffffff refin=false refout=false xorout=0x7fffffff check=0x0ce9e46c name="CRC-31/PHILIPS"
-int test_crc31(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(31, 0x04c11db7, 0x7fffffff, false, false, 0x7fffffff);
-
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x0ce9e46c )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0x04c11db7 init=0xffffffff refin=true refout=true xorout=0xffffffff check=0xcbf43926 name="CRC-32"
-int test_crc32(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xCBF43926 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0x04c11db7 init=0xffffffff refin=false refout=false xorout=0xffffffff check=0xfc891918 name="CRC-32/BZIP2"
-int test_crc32_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0x04c11db7, 0xFFFFFFFF, false, false, 0xFFFFFFFF);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xfc891918 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0x1edc6f41 init=0xffffffff refin=true refout=true xorout=0xffffffff check=0xe3069283 name="CRC-32C"
-int test_crc32_3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0x1edc6f41, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xe3069283 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0xa833982b init=0xffffffff refin=true refout=true xorout=0xffffffff check=0x87315576 name="CRC-32D"
-int test_crc32_4(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0xa833982b, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x87315576 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0x04c11db7 init=0xffffffff refin=false refout=false xorout=0x00000000 check=0x0376e6e7 name="CRC-32/MPEG-2"
-int test_crc32_5(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0x04c11db7, 0xFFFFFFFF, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x0376e6e7 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0x04c11db7 init=0x00000000 refin=false refout=false xorout=0xffffffff check=0x765e7680 name="CRC-32/POSIX"
-int test_crc32_6(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0x04c11db7, 0x0, false, false, 0xffffffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x765e7680 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0x814141ab init=0x00000000 refin=false refout=false xorout=0x00000000 check=0x3010bf7f name="CRC-32Q"
-int test_crc32_7(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0x814141ab, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x3010bf7f )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0x04c11db7 init=0xffffffff refin=true refout=true xorout=0x00000000 check=0x340bc6d9 name="JAMCRC"
-int test_crc32_8(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0x04c11db7, 0xffffffff, true, true, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x340bc6d9 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=32 poly=0x000000af init=0x00000000 refin=false refout=false xorout=0x00000000 check=0xbd0be338 name="CRC-32/XFER"
-int test_crc32_9(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint32_t crc;
-
-    uCRC_t ucrc(32, 0x000000af, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xbd0be338 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=40 poly=0x0004820009 init=0x0 refin=false refout=false xorout=0xffffffffff check=0xd4164fc646 name="CRC-40/GSM"
-int test_crc40(struct test_info_t  *test_info)
+int test_crc_std_check(struct test_info_t  *test_info)
 {
 
     TEST_INIT;
 
     uint64_t crc;
 
-    uCRC_t ucrc(40, 0x0004820009, 0x0, false, false, 0xffffffffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xd4164fc646 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
+    const struct CRC_Spec_Info *spec = CRC_List;
 
 
 
-//width=64 poly=0x42f0e1eba9ea3693 init=0x0 refin=false refout=false xorout=0x0 check=0x6c40df5f0b497347 name="CRC-64"
-int test_crc64(struct test_info_t  *test_info)
-{
+    while( spec->name )
+    {
 
-    TEST_INIT;
+        uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-    uint64_t crc;
-
-    uCRC_t ucrc(64, 0x42f0e1eba9ea3693, 0x0, false, false, 0x0);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x6c40df5f0b497347 )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
+        crc = ucrc.get_crc("123456789", 9);
+        if( crc != spec->check )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
+            return TEST_BROKEN;
+        }
 
 
-
-//width=64 poly=0x42f0e1eba9ea3693 init=0xffffffffffffffff refin=false refout=false
-//xorout=0xffffffffffffffff check=0x62ec59e3f1a4f00a name="CRC-64/WE"
-int test_crc64_2(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint64_t crc;
-
-    uCRC_t ucrc(64, 0x42f0e1eba9ea3693, 0xffffffffffffffff, false, false, 0xffffffffffffffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x62ec59e3f1a4f00a )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
-
-//width=64 poly=0x42f0e1eba9ea3693 init=0xffffffffffffffff refin=true refout=true
-//xorout=0xffffffffffffffff check=0x995dc9bbdf1939fa name="CRC-64/XZ"
-int test_crc64_3(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint64_t crc;
-
-    uCRC_t ucrc(64, 0x42f0e1eba9ea3693, 0xFFFFFFFFFFFFFFFF, true, true, 0xFFFFFFFFFFFFFFFF);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x995dc9bbdf1939fa )
-        return TEST_BROKEN;
+        spec++;
+    }
 
 
     return TEST_PASSED;
@@ -1787,96 +490,8 @@ ptest_func tests[] =
 
 
     //CRC
-    test_crc3,
+    test_crc_std_check,
 
-    test_crc4,
-    test_crc4_2,
-
-    test_crc5,
-    test_crc5_2,
-    test_crc5_3,
-
-    test_crc6,
-    test_crc6_2,
-    test_crc6_3,
-    test_crc6_4,
-
-    test_crc7,
-    test_crc7_2,
-
-    test_crc8,
-    test_crc8_2,
-    test_crc8_3,
-    test_crc8_4,
-    test_crc8_5,
-    test_crc8_6,
-    test_crc8_7,
-    test_crc8_8,
-    test_crc8_9,
-    test_crc8_10,
-    test_crc8_11,
-
-    test_crc10,
-    test_crc10_2,
-
-    test_crc11,
-
-    test_crc12,
-    test_crc12_2,
-    test_crc12_3,
-
-    test_crc13,
-
-    test_crc14,
-
-    test_crc15,
-    test_crc15_2,
-
-    test_crc16,
-    test_crc16_2,
-    test_crc16_3,
-    test_crc16_4,
-    test_crc16_5,
-    test_crc16_6,
-    test_crc16_7,
-    test_crc16_8,
-    test_crc16_9,
-    test_crc16_10,
-    test_crc16_11,
-    test_crc16_12,
-    test_crc16_13,
-    test_crc16_14,
-    test_crc16_15,
-    test_crc16_16,
-    test_crc16_17,
-    test_crc16_18,
-    test_crc16_19,
-    test_crc16_20,
-    test_crc16_21,
-    test_crc16_22,
-    test_crc16_23,
-
-    test_crc24,
-    test_crc24_2,
-    test_crc24_3,
-
-    test_crc31,
-
-    test_crc32,
-    test_crc32_2,
-    test_crc32_3,
-    test_crc32_4,
-    test_crc32_5,
-    test_crc32_6,
-    test_crc32_7,
-    test_crc32_8,
-    test_crc32_9,
-
-    test_crc40,
-
-    test_crc64,
-    test_crc64_2,
-    test_crc64_3,
 
     test_crc32_file,
     test_crc32_file_2,
@@ -1895,3 +510,6 @@ int main(void)
 
     return 0;
 }
+
+
+
