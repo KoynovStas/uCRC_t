@@ -448,19 +448,34 @@ int test_crc_std_check_file(struct test_info_t  *test_info)
 
 
 
-int test_crc32_file_2(struct test_info_t  *test_info)
+int test_crc_no_file(struct test_info_t  *test_info)
 {
 
     TEST_INIT;
 
     uint64_t crc;
 
-    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    const struct CRC_Spec_Info *spec = CRC_List;
 
-    int res = ucrc.get_crc(crc, ""); //no file
 
-    if( (res != -1) )
-        return TEST_BROKEN;
+
+    while( spec->name )
+    {
+
+        uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
+
+
+        int res = ucrc.get_crc(crc, "");
+        if( res != -1 )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " no file but get_crc() ret:" << res << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        spec++;
+    }
 
 
     return TEST_PASSED;
@@ -537,7 +552,7 @@ ptest_func tests[] =
 
 
     test_crc_std_check_file,
-    test_crc32_file_2,
+    test_crc_no_file,
 
     test_crc_for_cunks,
 };
