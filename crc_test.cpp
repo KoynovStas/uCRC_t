@@ -407,22 +407,40 @@ int test_crc_std_check_set_xxx(struct test_info_t  *test_info)
 }
 
 
+
 //------------- tests for Calculate CRC for file -------------
 
 
 
-int test_crc32_file(struct test_info_t  *test_info)
+// uses parameters constructor by class uCRC_t
+int test_crc_std_check_file(struct test_info_t  *test_info)
 {
 
     TEST_INIT;
 
     uint64_t crc;
 
-    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+    const struct CRC_Spec_Info *spec = CRC_List;
 
-    int res = ucrc.get_crc(crc, "std_file_to_test_crc");
-    if( (res != 0) ||  (crc != 0xCBF43926) )
-        return TEST_BROKEN;
+
+
+    while( spec->name )
+    {
+
+        uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
+
+
+        int res = ucrc.get_crc(crc, "std_file_to_test_crc");
+        if( (res != 0) ||  (crc != spec->check) )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        spec++;
+    }
 
 
     return TEST_PASSED;
@@ -504,7 +522,7 @@ ptest_func tests[] =
     test_crc_std_check_set_xxx,
 
 
-    test_crc32_file,
+    test_crc_std_check_file,
     test_crc32_file_2,
 
     test_crc32_cunks,
