@@ -332,7 +332,9 @@ int test_crc_t_set_bits(struct test_info_t  *test_info)
 //------------- tests for Calculate CRC  -------------
 
 
-int test_crc_std_check(struct test_info_t  *test_info)
+
+// uses parameters constructor by class uCRC_t
+int test_crc_std_check_constructor(struct test_info_t  *test_info)
 {
 
     TEST_INIT;
@@ -364,6 +366,45 @@ int test_crc_std_check(struct test_info_t  *test_info)
     return TEST_PASSED;
 }
 
+
+
+// uses set_xxx methods
+int test_crc_std_check_set_xxx(struct test_info_t  *test_info)
+{
+
+    TEST_INIT;
+
+    uint64_t crc;
+
+    const struct CRC_Spec_Info *spec = CRC_List;
+    uCRC_t ucrc;
+
+
+    while( spec->name )
+    {
+
+        ucrc.set_bits(spec->bits);
+        ucrc.set_poly(spec->poly);
+        ucrc.set_init(spec->init);
+        ucrc.set_ref_in(spec->ref_in);
+        ucrc.set_ref_out(spec->ref_out);
+        ucrc.set_xor_out(spec->xor_out);
+
+        crc = ucrc.get_crc("123456789", 9);
+        if( crc != spec->check )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        spec++;
+    }
+
+
+    return TEST_PASSED;
+}
 
 
 //------------- tests for Calculate CRC for file -------------
@@ -440,37 +481,6 @@ int test_crc32_cunks(struct test_info_t  *test_info)
 
 
 
-int test_dif_crc(struct test_info_t  *test_info)
-{
-
-    TEST_INIT;
-
-    uint64_t crc;
-
-    uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0xCBF43926 )
-        return TEST_BROKEN;
-
-
-    //change algo to CRC-64/XZ
-    ucrc.set_bits(64);
-    ucrc.set_poly(0x42f0e1eba9ea3693);
-    ucrc.set_init(0xffffffffffffffff);
-    ucrc.set_ref_in(true);
-    ucrc.set_ref_out(true);
-    ucrc.set_xor_out(0xffffffffffffffff);
-
-    crc = ucrc.get_crc("123456789", 9);
-    if( crc != 0x995dc9bbdf1939fa )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
-}
-
-
 
 ptest_func tests[] =
 {
@@ -490,15 +500,14 @@ ptest_func tests[] =
 
 
     //CRC
-    test_crc_std_check,
+    test_crc_std_check_constructor,
+    test_crc_std_check_set_xxx,
 
 
     test_crc32_file,
     test_crc32_file_2,
 
     test_crc32_cunks,
-
-    test_dif_crc,
 };
 
 
