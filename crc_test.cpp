@@ -213,12 +213,25 @@ int test_crc_t_get_poly(struct test_info_t  *test_info)
 
     TEST_INIT;
 
+    const struct CRC_Spec_Info *spec = CRC_List;
 
-    uCRC_t crc(1, 123, 0, true, true, 0);
+
+    while( spec->name )
+    {
+
+        uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
 
-    if( crc.get_poly() != 123 )
-        return TEST_BROKEN;
+        if( ucrc.get_poly() != spec->poly )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " poly must be: 0x" << spec->bits << " but get: 0x" << ucrc.get_poly() << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        spec++;
+    }
 
 
     return TEST_PASSED;
