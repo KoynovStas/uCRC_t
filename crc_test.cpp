@@ -225,7 +225,7 @@ int test_crc_t_get_poly(struct test_info_t  *test_info)
         if( ucrc.get_poly() != spec->poly )
         {
             std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " poly must be: 0x" << spec->bits << " but get: 0x" << ucrc.get_poly() << "\n";
+            std::cout << "For CRC: " << spec->name <<  " poly must be: 0x" << spec->poly << " but get: 0x" << ucrc.get_poly() << "\n";
             return TEST_BROKEN;
         }
 
@@ -256,7 +256,7 @@ int test_crc_t_get_init(struct test_info_t  *test_info)
         if( ucrc.get_init() != spec->init )
         {
             std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " init must be: 0x" << spec->bits << " but get: 0x" << ucrc.get_init() << "\n";
+            std::cout << "For CRC: " << spec->name <<  " init must be: 0x" << spec->init << " but get: 0x" << ucrc.get_init() << "\n";
             return TEST_BROKEN;
         }
 
@@ -275,12 +275,25 @@ int test_crc_t_get_xor_out(struct test_info_t  *test_info)
 
     TEST_INIT;
 
+    const struct CRC_Spec_Info *spec = CRC_List;
 
-    uCRC_t crc(1, 0, 0, true, true, 1000);
+
+    while( spec->name )
+    {
+
+        uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
 
-    if( crc.get_xor_out() != 1000 )
-        return TEST_BROKEN;
+        if( ucrc.get_xor_out() != spec->xor_out )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " xor_out must be: 0x" << spec->xor_out << " but get: 0x" << ucrc.get_xor_out() << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        spec++;
+    }
 
 
     return TEST_PASSED;
