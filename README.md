@@ -122,7 +122,7 @@ void set_ref_out(bool new_ref_out)     { ref_out = new_ref_out;}
 
 
 // Calculate methods
-uint64_t get_crc(const char* buf, size_t len) const;
+uint64_t get_crc(const void* data, size_t len) const;
 int      get_crc(uint64_t &crc, const char* file_name) const;
 int      get_crc(uint64_t &crc, FILE* pfile) const;
 int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
@@ -130,7 +130,7 @@ int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
 
 
 // Calculate for chunks of data
-uint64_t get_raw_crc(const char* buf, size_t len, uint64_t crc) const; //for first byte crc = crc_init (must be)
+uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc) const; //for first byte crc = crc_init (must be)
 uint64_t get_final_crc(uint64_t raw_crc) const;
 ```
 
@@ -214,7 +214,7 @@ crc = ucrc.get_crc(buf, len_of_buf);
 **Get CRC-32 for buf(s) (chunks):**
 
 **Note:**
-when the method is used uint64_t get_raw_crc(uint64_t crc, const char* buf, size_t len)
+when the method is used uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc)
 for the first byte (or chunk of data) **crc** param must be obtained through a method **get_crc_init()** and in the final you need to call the method: **get_final_crc():**
 
 ```C++
@@ -226,9 +226,10 @@ uint32_t crc;
 uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
 crc = ucrc.get_crc_init();
-crc = ucrc.get_raw_crc(crc, buf,  len_of_buf);   //first chunk
-crc = ucrc.get_raw_crc(crc, buf2, len_of_buf2);  //second chunk
+crc = ucrc.get_raw_crc(buf,  len_of_buf,  crc);  //first chunk
+crc = ucrc.get_raw_crc(buf2, len_of_buf2, crr);  //second chunk
 crc = get_final_crc(crc);
+
 //uses crc
 ```
 
