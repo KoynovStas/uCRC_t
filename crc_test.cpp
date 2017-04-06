@@ -49,6 +49,7 @@ const CRC_Spec_Info  CRC_List[] =
     // CRC-7
     { "CRC-7",      7, 0x9,  0x0,  false, false, 0x0, 0x75 },
     { "CRC-7/ROHC", 7, 0x4F, 0x7F, true,  true,  0x0, 0x53 },
+    { "CRC-7/UMTS", 7, 0x45, 0x0,  false, false, 0x0, 0x61 },
 
     // CRC-8
     { "CRC-8",          8, 0x7,  0x0,  false, false, 0x0, 0xF4 },
