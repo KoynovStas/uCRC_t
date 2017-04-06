@@ -74,7 +74,8 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-10/GSM",      10, 0x175, 0x0,   false, false, 0x3FF, 0x12A },
 
     // CRC-11
-    { "CRC-11", 11, 0x385, 0x1A, false, false, 0x0, 0x5A3 },
+    { "CRC-11",      11, 0x385, 0x1A, false, false, 0x0, 0x5A3 },
+    { "CRC-11/UMTS", 11, 0x307, 0x0,  false, false, 0x0, 0x061 },
 
     // CRC-12
     { "CRC-12/3GPP",     12, 0x80F, 0x0,   false, true,  0x0, 0xDAF },
