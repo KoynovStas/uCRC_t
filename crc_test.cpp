@@ -69,8 +69,9 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-8/WCDMA",      8, 0x9B, 0x0,  true,  true,  0x0,  0x25 },
 
     // CRC-10
-    { "CRC-10",          10, 0x233, 0x0,   false, false, 0x0, 0x199 },
-    { "CRC-10/CDMA2000", 10, 0x3D9, 0x3FF, false, false, 0x0, 0x233 },
+    { "CRC-10",          10, 0x233, 0x0,   false, false, 0x0,   0x199 },
+    { "CRC-10/CDMA2000", 10, 0x3D9, 0x3FF, false, false, 0x0,   0x233 },
+    { "CRC-10/GSM",      10, 0x175, 0x0,   false, false, 0x3FF, 0x12A },
 
     // CRC-11
     { "CRC-11", 11, 0x385, 0x1A, false, false, 0x0, 0x5A3 },
