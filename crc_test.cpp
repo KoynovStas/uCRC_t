@@ -91,7 +91,7 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-14/GSM",  14, 0x202D, 0x0, false, false, 0x3FFF, 0x30AE },
 
     // CRC-15
-    { "CRC-15",         15, 0x4599, 0x0, false, false, 0x0, 0x59E },
+    { "CRC-15",         15, 0x4599, 0x0, false, false, 0x0, 0x59E  },
     { "CRC-15/MPT1327", 15, 0x6815, 0x0, false, false, 0x1, 0x2566 },
 
     // CRC-16
@@ -100,9 +100,10 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-16/BUYPASS",     16, 0x8005, 0x0,    false, false, 0x0,    0xFEE8 },
     { "CRC-16/CCITT-FALSE", 16, 0x1021, 0xFFFF, false, false, 0x0,    0x29B1 },
     { "CRC-16/CDMA2000",    16, 0xC867, 0xFFFF, false, false, 0x0,    0x4C06 },
+    { "CRC-16/CMS",         16, 0x8005, 0xFFFF, false, false, 0x0,    0xAEE7 },
     { "CRC-16/DDS-110",     16, 0x8005, 0x800D, false, false, 0x0,    0x9ECF },
-    { "CRC-16/DECT-R",      16, 0x589,  0x0,    false, false, 0x1,    0x7E },
-    { "CRC-16/DECT-X",      16, 0x589,  0x0,    false, false, 0x0,    0x7F },
+    { "CRC-16/DECT-R",      16, 0x589,  0x0,    false, false, 0x1,    0x7E   },
+    { "CRC-16/DECT-X",      16, 0x589,  0x0,    false, false, 0x0,    0x7F   },
     { "CRC-16/DNP",         16, 0x3D65, 0x0,    true,  true,  0xFFFF, 0xEA82 },
     { "CRC-16/EN-13757",    16, 0x3D65, 0x0,    false, false, 0xFFFF, 0xC2B7 },
     { "CRC-16/GENIBUS",     16, 0x1021, 0xFFFF, false, false, 0xFFFF, 0xD64E },
@@ -110,7 +111,7 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-16/MCRF4XX",     16, 0x1021, 0xFFFF, true,  true,  0x0,    0x6F91 },
     { "CRC-16/RIELLO",      16, 0x1021, 0xB2AA, true,  true,  0x0,    0x63D0 },
     { "CRC-16/T10-DIF",     16, 0x8BB7, 0x0,    false, false, 0x0,    0xD0DB },
-    { "CRC-16/TELEDISK",    16, 0xA097, 0x0,    false, false, 0x0,    0xFB3 },
+    { "CRC-16/TELEDISK",    16, 0xA097, 0x0,    false, false, 0x0,    0xFB3  },
     { "CRC-16/TMS37157",    16, 0x1021, 0x89EC, true,  true,  0x0,    0x26B1 },
     { "CRC-16/USB",         16, 0x8005, 0xFFFF, true,  true,  0xFFFF, 0xB4C8 },
     { "CRC-A",              16, 0x1021, 0xC6C6, true,  true,  0x0,    0xBF05 },
