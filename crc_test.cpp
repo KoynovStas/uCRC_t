@@ -108,6 +108,7 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-16/EN-13757",    16, 0x3D65, 0x0,    false, false, 0xFFFF, 0xC2B7 },
     { "CRC-16/GENIBUS",     16, 0x1021, 0xFFFF, false, false, 0xFFFF, 0xD64E },
     { "CRC-16/GSM",         16, 0x1021, 0x0,    false, false, 0xFFFF, 0xCE3C },
+    { "CRC-16/LJ1200",      16, 0x6F63, 0x0,    false, false, 0x0,    0xBDF4 },
     { "CRC-16/MAXIM",       16, 0x8005, 0x0,    true,  true,  0xFFFF, 0x44C2 },
     { "CRC-16/MCRF4XX",     16, 0x1021, 0xFFFF, true,  true,  0x0,    0x6F91 },
     { "CRC-16/RIELLO",      16, 0x1021, 0xB2AA, true,  true,  0x0,    0x63D0 },
