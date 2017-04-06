@@ -126,10 +126,11 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-16/XMODEM",      16, 0x1021, 0x0,    false, false, 0x0,    0x31C3 },
 
     // CRC-24
-    { "CRC-24",           24, 0x864CFB, 0xB704CE, false, false, 0x0, 0x21CF02 },
-    { "CRC-24/BLE",       24, 0x65B,    0x555555, true,  true,  0x0, 0xC25A56 },
-    { "CRC-24/FLEXRAY-A", 24, 0x5D6DCB, 0xFEDCBA, false, false, 0x0, 0x7979BD },
-    { "CRC-24/FLEXRAY-B", 24, 0x5D6DCB, 0xABCDEF, false, false, 0x0, 0x1F23B8 },
+    { "CRC-24",            24, 0x864CFB, 0xB704CE, false, false, 0x0,      0x21CF02 },
+    { "CRC-24/BLE",        24, 0x65B,    0x555555, true,  true,  0x0,      0xC25A56 },
+    { "CRC-24/FLEXRAY-A",  24, 0x5D6DCB, 0xFEDCBA, false, false, 0x0,      0x7979BD },
+    { "CRC-24/FLEXRAY-B",  24, 0x5D6DCB, 0xABCDEF, false, false, 0x0,      0x1F23B8 },
+    { "CRC-24/INTERLAKEN", 24, 0x328B63, 0xFFFFFF, false, false, 0xFFFFFF, 0xB4F3E6 },
 
     // CRC-31
     { "CRC-31/PHILIPS", 31, 0x4C11DB7, 0x7FFFFFFF, false, false, 0x7FFFFFFF, 0xCE9E46C },
