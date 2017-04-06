@@ -87,7 +87,8 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-13/BBC", 13, 0x1CF5, 0x0, false, false, 0x0, 0x4FA },
 
     // CRC-14
-    { "CRC-14/DARC", 14, 0x805, 0x0, true, true, 0x0, 0x82D },
+    { "CRC-14/DARC", 14, 0x805,  0x0, true,  true,  0x0,    0x82D  },
+    { "CRC-14/GSM",  14, 0x202D, 0x0, false, false, 0x3FFF, 0x30AE },
 
     // CRC-15
     { "CRC-15",         15, 0x4599, 0x0, false, false, 0x0, 0x59E },
