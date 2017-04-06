@@ -53,6 +53,7 @@ const CRC_Spec_Info  CRC_List[] =
 
     // CRC-8
     { "CRC-8",          8, 0x7,  0x0,  false, false, 0x0, 0xF4 },
+    { "CRC-8/AUTOSAR",  8, 0x2F, 0xFF, false, false, 0xFF,0xDF },
     { "CRC-8/CDMA2000", 8, 0x9B, 0xFF, false, false, 0x0, 0xDA },
     { "CRC-8/DARC",     8, 0x39, 0x0,  true,  true,  0x0, 0x15 },
     { "CRC-8/DVB-S2",   8, 0xD5, 0x0,  false, false, 0x0, 0xBC },
