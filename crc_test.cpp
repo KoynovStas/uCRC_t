@@ -78,9 +78,10 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-11/UMTS", 11, 0x307, 0x0,  false, false, 0x0, 0x061 },
 
     // CRC-12
-    { "CRC-12/3GPP",     12, 0x80F, 0x0,   false, true,  0x0, 0xDAF },
-    { "CRC-12/CDMA2000", 12, 0xF13, 0xFFF, false, false, 0x0, 0xD4D },
-    { "CRC-12/DECT",     12, 0x80F, 0x0,   false, false, 0x0, 0xF5B },
+    { "CRC-12/3GPP",     12, 0x80F, 0x0,   false, true,  0x0,   0xDAF },
+    { "CRC-12/CDMA2000", 12, 0xF13, 0xFFF, false, false, 0x0,   0xD4D },
+    { "CRC-12/DECT",     12, 0x80F, 0x0,   false, false, 0x0,   0xF5B },
+    { "CRC-12/GSM",      12, 0xD31, 0x0,   false, false, 0xFFF, 0xB34 },
 
     // CRC-13
     { "CRC-13/BBC", 13, 0x1CF5, 0x0, false, false, 0x0, 0x4FA },
