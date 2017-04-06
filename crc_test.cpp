@@ -112,6 +112,7 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-16/MAXIM",       16, 0x8005, 0x0,    true,  true,  0xFFFF, 0x44C2 },
     { "CRC-16/MCRF4XX",     16, 0x1021, 0xFFFF, true,  true,  0x0,    0x6F91 },
     { "CRC-16/OPENSAFETY-A",16, 0x5935, 0x0,    false, false, 0x0,    0x5D38 },
+    { "CRC-16/OPENSAFETY-B",16, 0x755B, 0x0,    false, false, 0x0,    0x20FE },
     { "CRC-16/RIELLO",      16, 0x1021, 0xB2AA, true,  true,  0x0,    0x63D0 },
     { "CRC-16/T10-DIF",     16, 0x8BB7, 0x0,    false, false, 0x0,    0xD0DB },
     { "CRC-16/TELEDISK",    16, 0xA097, 0x0,    false, false, 0x0,    0xFB3  },
