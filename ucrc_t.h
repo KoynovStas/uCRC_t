@@ -53,7 +53,7 @@ class uCRC_t
 
     public:
 
-        explicit uCRC_t(const std::string Name = "CRC-32",
+        explicit uCRC_t(const std::string& Name = "CRC-32",
                         uint8_t  Bits   = 32,
                         uint64_t Poly   = 0x04c11db7,
                         uint64_t Init   = 0xffffffff,
@@ -88,12 +88,12 @@ class uCRC_t
 
 
         // set param CRC
-        int  set_bits(uint8_t new_bits);
-        void set_poly(uint64_t new_poly)       { poly    = new_poly; init_class();}
-        void set_init(uint64_t new_init)       { init    = new_init; init_class();}
-        void set_xor_out(uint64_t new_xor_out) { xor_out = new_xor_out;}
-        void set_ref_in(bool new_ref_in)       { ref_in  = new_ref_in; init_class();}
-        void set_ref_out(bool new_ref_out)     { ref_out = new_ref_out;}
+        int  set_bits(uint8_t new_value);
+        void set_poly(uint64_t new_value)    { poly    = new_value; init_class();}
+        void set_init(uint64_t new_value)    { init    = new_value; init_class();}
+        void set_ref_in(bool new_value)      { ref_in  = new_value; init_class();}
+        void set_ref_out(bool new_value)     { ref_out = new_value;}
+        void set_xor_out(uint64_t new_value) { xor_out = new_value;}
 
 
         // Calculate methods

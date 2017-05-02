@@ -400,8 +400,6 @@ int test_crc_t_set_bits(struct test_info_t  *test_info)
 
     TEST_INIT;
 
-    int i, res;
-
     uCRC_t crc(1, 0, 0, true, true, 0);
 
 
@@ -413,9 +411,9 @@ int test_crc_t_set_bits(struct test_info_t  *test_info)
          return TEST_BROKEN;
 
     // 1..64
-    for( i = 1; i <= 64; ++i)
+    for(int i = 1; i <= 64; ++i)
     {
-        res = crc.set_bits(i);
+        int res = crc.set_bits(i);
         if( res != 0 )
              return TEST_BROKEN;
 
@@ -425,7 +423,7 @@ int test_crc_t_set_bits(struct test_info_t  *test_info)
 
 
     //more 64
-    for( i = 65; i <= 256; ++i)
+    for(int i = 65; i <= 256; ++i)
     {
         if( crc.set_bits(i) != -1 )
              return TEST_BROKEN;

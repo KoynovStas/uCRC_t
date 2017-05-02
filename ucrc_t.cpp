@@ -41,7 +41,7 @@
 
 
 
-uCRC_t::uCRC_t(const std::string Name, uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut) :
+uCRC_t::uCRC_t(const std::string & Name, uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut) :
     name    (Name),
     bits    (Bits),
     poly    (Poly),
@@ -79,13 +79,13 @@ uint64_t uCRC_t::get_check() const
 
 
 
-int uCRC_t::set_bits(uint8_t new_bits)
+int uCRC_t::set_bits(uint8_t new_value)
 {
-    if( (new_bits < 1) || (new_bits > 64) )
+    if( (new_value < 1) || (new_value > 64) )
         return -1; //error
 
 
-    bits = new_bits;
+    bits = new_value;
     init_class();
 
 
@@ -167,7 +167,7 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile, void *buf, size_t size_buf) cons
     }
 
 
-    fseek(pfile, cur_pos, SEEK_SET);
+    fseek(pfile, cur_pos, SEEK_SET); // restore old position in file
 
 
     crc = get_final_crc(crc);
