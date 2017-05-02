@@ -3,7 +3,7 @@
 
 ## Description
 
-uCRC_t is universal C++ class for calculation CRC sizes(width) 1-64 bits.
+`uCRC_t` is universal C++ class for calculation CRC sizes(width) 1-64 bits.
 
 
 #### Features of the implementation:
@@ -11,13 +11,13 @@ uCRC_t is universal C++ class for calculation CRC sizes(width) 1-64 bits.
  - The code uses only the standard **C++03 not C++11** -> This allows you to use the class in the oldest projects with older compilers.
  - In the code not uses the library boost.
  - The code has no dependencies.
- - You can change the parameters of the algorithm CRC in Run-Time, see set_xxx methods.
+ - You can change the parameters of the algorithm CRC in Run-Time, see `set_xxx` methods.
  - For **any** bit-depth (width) of CRC will be use the standard table method for calculation. Will be calculated standart table for byte (table size 256 elements)
 
 
 #### Limitations of the implementation:
 
-- This class is universal, but it leads to extra work because the data type is uint64_t. This is not optimal.
+- This class is universal, but it leads to extra work because the data type is `uint64_t`. This is not optimal.
 
 
 If you don't need such universality, you can use a more optimized template for your algorithm see:[CRC_CPP_Template](https://github.com/KoynovStas/CRC_CPP_Template)
@@ -79,7 +79,7 @@ Class parameters is the standard Specifications algorithms CRC as described in R
 
 **The class has the following public methods:**
 ```C++
-explicit uCRC_t(const std::string Name = "CRC-32",
+explicit uCRC_t(const std::string& Name = "CRC-32",
                 uint8_t  Bits   = 32,
                 uint64_t Poly   = 0x04c11db7,
                 uint64_t Init   = 0xffffffff,
@@ -110,15 +110,16 @@ bool     get_ref_out() const { return ref_out;}
 uint64_t get_crc_init()const { return crc_init;} //crc_init = reflect(init, bits) if RefIn, else = init
 uint64_t get_top_bit() const { return top_bit; }
 uint64_t get_crc_mask()const { return crc_mask;}
+uint64_t get_check()   const;                    //crc for ASCII string "123456789" (i.e. 313233... (hexadecimal)).
 
 
 // set param CRC
-int  set_bits(uint8_t new_bits);
-void set_poly(uint64_t new_poly)       { poly    = new_poly; init_class();}
-void set_init(uint64_t new_init)       { init    = new_init; init_class();}
-void set_xor_out(uint64_t new_xor_out) { xor_out = new_xor_out;}
-void set_ref_in(bool new_ref_in)       { ref_in  = new_ref_in; init_class();}
-void set_ref_out(bool new_ref_out)     { ref_out = new_ref_out;}
+int  set_bits(uint8_t new_value);
+void set_poly(uint64_t new_value)    { poly    = new_value; init_class();}
+void set_init(uint64_t new_value)    { init    = new_value; init_class();}
+void set_ref_in(bool new_value)      { ref_in  = new_value; init_class();}
+void set_ref_out(bool new_value)     { ref_out = new_value;}
+void set_xor_out(uint64_t new_value) { xor_out = new_value;}
 
 
 // Calculate methods
@@ -137,7 +138,7 @@ uint64_t get_final_crc(uint64_t raw_crc) const;
 More details see: **[ucrc_t.h](./ucrc_t.h)**
 
 
-<br/>
+
 ## Usage
 
 **To start working, perform the following steps:**
@@ -147,7 +148,7 @@ More details see: **[ucrc_t.h](./ucrc_t.h)**
 3. Set parameters in a class (see an examples).
 
 
-<br/>
+
 ## Examples
 
 **Get CRC-32 for file:**
@@ -170,8 +171,8 @@ if( res != -1 )
 int      get_crc(uint64_t &crc, const char* file_name) const;
 int      get_crc(uint64_t &crc, FILE* pfile) const;
 ```
-These methods are reentrant. They use a buffer on the stack. 
-The buffer size is 4 Kib (4096 bytes) - which is optimal for most systems. 
+These methods are reentrant. They use a buffer on the stack.
+The buffer size is 4 Kib (4096 bytes) - which is optimal for most systems.
 If you have a buffer or needs aligned buffer, you can use the following methods:
 
 ```C++
@@ -179,8 +180,8 @@ int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_bu
 int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
 ```
 
-The method which uses FILE* set the file pointer(pos) to the beginning. 
-After work, the file position is returned to the original position before the work function get_crc().
+The method which uses FILE* set the file pointer(pos) to the beginning.
+After work, the file position is returned to the original position before the work function `get_crc()`.
 
 
 **Get CRC-32 for single buf:**
@@ -214,8 +215,8 @@ crc = ucrc.get_crc(buf, len_of_buf);
 **Get CRC-32 for buf(s) (chunks):**
 
 **Note:**
-when the method is used uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc)
-for the first byte (or chunk of data) **crc** param must be obtained through a method **get_crc_init()** and in the final you need to call the method: **get_final_crc():**
+when the method is used `uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc)`
+for the first byte (or chunk of data) **crc** param must be obtained through a method `get_crc_init()` and in the final you need to call the method: `get_final_crc()`:
 
 ```C++
 char buf[len_of_buf];   //bla bla
@@ -236,7 +237,7 @@ crc = get_final_crc(crc);
 More details can be found in the test application: **[crc_test.cpp](./crc_test.cpp)**
 
 
-<br/>
+
 ## License
 
-[BSD](./LICENSE).
+[BSD-3-Clause](./LICENSE).
