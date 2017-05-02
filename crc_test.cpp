@@ -166,6 +166,10 @@ const CRC_Spec_Info  CRC_List[] =
 
 
 
+const uint8_t std_check_data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
+
+
+
 //------------- tests for CRC_t methods -------------
 
 
@@ -455,11 +459,19 @@ int test_crc_std_check_constructor(struct test_info_t  *test_info)
 
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-        crc = ucrc.get_crc("123456789", 9);
+        crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
         if( crc != spec->check )
         {
             std::cout << std::hex;
             std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        if( ucrc.get_check() != spec->check )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check() << "\n";
             return TEST_BROKEN;
         }
 
@@ -495,11 +507,19 @@ int test_crc_std_check_set_xxx(struct test_info_t  *test_info)
         ucrc.set_ref_out(spec->ref_out);
         ucrc.set_xor_out(spec->xor_out);
 
-        crc = ucrc.get_crc("123456789", 9);
+        crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
         if( crc != spec->check )
         {
             std::cout << std::hex;
             std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
+            return TEST_BROKEN;
+        }
+
+
+        if( ucrc.get_check() != spec->check )
+        {
+            std::cout << std::hex;
+            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check() << "\n";
             return TEST_BROKEN;
         }
 
@@ -599,9 +619,6 @@ int test_crc_for_cunks(struct test_info_t  *test_info)
 
     uint64_t crc;
 
-    char buf[]  = "1234";
-    char buf2[] = "56789";
-
     const struct CRC_Spec_Info *spec = CRC_List;
 
 
@@ -613,8 +630,8 @@ int test_crc_for_cunks(struct test_info_t  *test_info)
 
 
         crc = ucrc.get_crc_init();
-        crc = ucrc.get_raw_crc(buf,  4, crc);
-        crc = ucrc.get_raw_crc(buf2, 5, crc);
+        crc = ucrc.get_raw_crc(&std_check_data[0], 4, crc);
+        crc = ucrc.get_raw_crc(&std_check_data[4], 5, crc);
         crc = ucrc.get_final_crc(crc);
 
         if( crc != spec->check )

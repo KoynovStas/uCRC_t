@@ -70,6 +70,15 @@ uCRC_t::uCRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefO
 
 
 
+uint64_t uCRC_t::get_check() const
+{
+    const uint8_t data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
+
+    return get_crc(data, sizeof(data));
+}
+
+
+
 int uCRC_t::set_bits(uint8_t new_bits)
 {
     if( (new_bits < 1) || (new_bits > 64) )
