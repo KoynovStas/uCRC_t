@@ -2,7 +2,7 @@
  * ucrc_t.cpp
  *
  *
- * version 1.2
+ * version 1.3
  *
  *
  * Copyright (c) 2015, Koynov Stas - skojnov@yandex.ru
@@ -37,6 +37,7 @@
 #include "ucrc_t.h"
 #include <cstdio>
 #include <errno.h>
+
 
 
 
