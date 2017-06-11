@@ -1,4 +1,6 @@
-CPPFLAGS += -O2 -Wall
+CPPFLAGS += -O2  -s  -Wall
+CPPFLAGS += -D__USE_MINGW_ANSI_STDIO=1  #-DWITHOUT_COLOR_COLOR
+CPPFLAGS += -I..
 CPP       =  g++
 #CPP       =  arm-gcc_4.9.2_cortex_a15-linux-uclibcgnueabi-g++
 
@@ -25,7 +27,7 @@ clean:
 
 .PHONY: $(TESTS)
 $(TESTS):
-	$(CPP)  $@.cpp ucrc_t.cpp unit_tests.cpp -o $@  $(CPPFLAGS)
+	$(CPP)  $@.cpp ../ucrc_t.cpp unit_tests.cpp -o $@  $(CPPFLAGS)
 	@echo "  ---- Compiled $@ ----"
 	@echo ""
 	@echo "  ---- Start tests ----"
@@ -37,8 +39,8 @@ $(TESTS):
 
 .PHONY: asm
 asm:
-	$(CPP)  crc_test.cpp $(CPPFLAGS) -S
-	$(CPP)  ucrc_t.cpp $(CPPFLAGS) -S
+	$(CPP)  crc_test.cpp  $(CPPFLAGS) -S
+	$(CPP)  ../ucrc_t.cpp $(CPPFLAGS) -S
 
 
 
@@ -51,4 +53,3 @@ help:
 	@echo "   all     -  clean and build all tests"
 	@echo "   asm     -  get ASM listing"
 	@echo "   help    -  This help"
-
