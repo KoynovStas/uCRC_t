@@ -1,5 +1,6 @@
 #include <iostream>
-#include "unit_tests.h"
+#include <sstream>
+#include "stest.h"
 #include "ucrc_t.h"
 
 
@@ -173,265 +174,197 @@ const uint8_t std_check_data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38
 //------------- tests for CRC_t methods -------------
 
 
-int test_crc_t_name(struct test_info_t  *test_info)
+TEST(test_crc_t_name)
 {
-
-    TEST_INIT;
-
-
     uCRC_t  crc;
 
+    TEST_ASSERT( crc.name == "CRC-32" );
 
-    if( crc.name != "CRC-32" )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_t_name_2(struct test_info_t  *test_info)
+TEST(test_crc_t_name_2)
 {
-
-    TEST_INIT;
-
     const char* name = "some_name";
 
     uCRC_t crc(name);
 
+    TEST_ASSERT( crc.name == name );
 
-    if( crc.name != name )
-        return TEST_BROKEN;
-
-
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_t_get_bits(struct test_info_t  *test_info)
+TEST(test_crc_t_get_bits)
 {
-
-    TEST_INIT;
-
     const struct CRC_Spec_Info *spec = CRC_List;
 
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
-        if( ucrc.get_bits() != spec->bits )
-        {
-            std::cout << "For CRC: " << spec->name <<  " bits must be: " << spec->bits << " but get: " << ucrc.get_bits() << "\n";
-            return TEST_BROKEN;
-        }
-
+        TEST_ASSERT( ucrc.get_bits() == spec->bits);
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_t_get_poly(struct test_info_t  *test_info)
+TEST(test_crc_t_get_poly)
 {
-
-    TEST_INIT;
-
     const struct CRC_Spec_Info *spec = CRC_List;
 
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
 
         if( ucrc.get_poly() != spec->poly )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " poly must be: 0x" << spec->poly << " but get: 0x" << ucrc.get_poly() << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " poly must be: 0x" << spec->poly << " but get: 0x" << ucrc.get_poly();
+            TEST_FAIL(ss.str().c_str());
         }
-
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_t_get_init(struct test_info_t  *test_info)
+TEST(test_crc_t_get_init)
 {
-
-    TEST_INIT;
-
     const struct CRC_Spec_Info *spec = CRC_List;
 
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
 
         if( ucrc.get_init() != spec->init )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " init must be: 0x" << spec->init << " but get: 0x" << ucrc.get_init() << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " init must be: 0x" << spec->init << " but get: 0x" << ucrc.get_init();
+            TEST_FAIL(ss.str().c_str());
         }
-
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_t_get_xor_out(struct test_info_t  *test_info)
+TEST(test_crc_t_get_xor_out)
 {
-
-    TEST_INIT;
-
     const struct CRC_Spec_Info *spec = CRC_List;
 
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
 
         if( ucrc.get_xor_out() != spec->xor_out )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " xor_out must be: 0x" << spec->xor_out << " but get: 0x" << ucrc.get_xor_out() << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " xor_out must be: 0x" << spec->xor_out << " but get: 0x" << ucrc.get_xor_out();
+            TEST_FAIL(ss.str().c_str());
         }
-
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_t_get_ref_in(struct test_info_t  *test_info)
+TEST(test_crc_t_get_ref_in)
 {
-
-    TEST_INIT;
-
     const struct CRC_Spec_Info *spec = CRC_List;
 
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
-        if( ucrc.get_ref_in() != spec->ref_in )
-        {
-            std::cout << std::boolalpha;
-            std::cout << "For CRC: " << spec->name <<  " ref_in must be: " << spec->ref_in << " but get: " << ucrc.get_ref_in() << "\n";
-            return TEST_BROKEN;
-        }
-
+        TEST_ASSERT( ucrc.get_ref_in() == spec->ref_in );
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_t_get_ref_out(struct test_info_t  *test_info)
+TEST(test_crc_t_get_ref_out)
 {
-
-    TEST_INIT;
-
     const struct CRC_Spec_Info *spec = CRC_List;
 
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
-        if( ucrc.get_ref_out() != spec->ref_out )
-        {
-            std::cout << std::boolalpha;
-            std::cout << "For CRC: " << spec->name <<  " ref_out must be: " << spec->ref_out << " but get: " << ucrc.get_ref_out() << "\n";
-            return TEST_BROKEN;
-        }
-
+        TEST_ASSERT( ucrc.get_ref_out() == spec->ref_out );
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_t_set_bits(struct test_info_t  *test_info)
+TEST(test_crc_t_set_bits)
 {
-
-    TEST_INIT;
-
     uCRC_t crc(1, 0, 0, true, true, 0);
 
 
-    if( crc.get_bits() != 1 )
-        return TEST_BROKEN;
+    TEST_ASSERT( crc.get_bits() == 1 );
 
 
-    if( crc.set_bits(0) != -1 )
-         return TEST_BROKEN;
+    TEST_ASSERT( crc.set_bits(0) == -1 );
 
     // 1..64
     for(int i = 1; i <= 64; ++i)
     {
-        int res = crc.set_bits(i);
-        if( res != 0 )
-             return TEST_BROKEN;
-
-        if( crc.get_bits() != i )
-            return TEST_BROKEN;
+        TEST_ASSERT( crc.set_bits(i) == 0 );
+        TEST_ASSERT( crc.get_bits() == i );
     }
 
 
     //more 64
     for(int i = 65; i <= 256; ++i)
     {
-        if( crc.set_bits(i) != -1 )
-             return TEST_BROKEN;
+        TEST_ASSERT( crc.set_bits(i) == -1 );
     }
 
 
-
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
@@ -441,11 +374,8 @@ int test_crc_t_set_bits(struct test_info_t  *test_info)
 
 
 // uses parameters constructor by class uCRC_t
-int test_crc_std_check_constructor(struct test_info_t  *test_info)
+TEST(test_crc_std_check_constructor)
 {
-
-    TEST_INIT;
-
     uint64_t crc;
 
     const struct CRC_Spec_Info *spec = CRC_List;
@@ -460,35 +390,33 @@ int test_crc_std_check_constructor(struct test_info_t  *test_info)
         crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
         if( crc != spec->check )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
+            TEST_FAIL(ss.str().c_str());
         }
 
 
         if( ucrc.get_check() != spec->check )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check() << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check();
+            TEST_FAIL(ss.str().c_str());
         }
-
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
 // uses set_xxx methods
-int test_crc_std_check_set_xxx(struct test_info_t  *test_info)
+TEST(test_crc_std_check_set_xxx)
 {
-
-    TEST_INIT;
-
     uint64_t crc;
 
     const struct CRC_Spec_Info *spec = CRC_List;
@@ -508,17 +436,19 @@ int test_crc_std_check_set_xxx(struct test_info_t  *test_info)
         crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
         if( crc != spec->check )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
+            TEST_FAIL(ss.str().c_str());
         }
 
 
         if( ucrc.get_check() != spec->check )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check() << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check();
+            TEST_FAIL(ss.str().c_str());
         }
 
 
@@ -526,7 +456,7 @@ int test_crc_std_check_set_xxx(struct test_info_t  *test_info)
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
@@ -536,15 +466,11 @@ int test_crc_std_check_set_xxx(struct test_info_t  *test_info)
 
 
 // uses parameters constructor by class uCRC_t
-int test_crc_std_check_file(struct test_info_t  *test_info)
+TEST(test_crc_std_check_file)
 {
-
-    TEST_INIT;
-
     uint64_t crc;
 
     const struct CRC_Spec_Info *spec = CRC_List;
-
 
 
     while( spec->name )
@@ -556,30 +482,26 @@ int test_crc_std_check_file(struct test_info_t  *test_info)
         int res = ucrc.get_crc(crc, "std_file_to_test_crc");
         if( (res != 0) ||  (crc != spec->check) )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
+            TEST_FAIL(ss.str().c_str());
         }
-
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
-int test_crc_no_file(struct test_info_t  *test_info)
+TEST(test_crc_no_file)
 {
-
-    TEST_INIT;
-
     uint64_t crc;
 
     const struct CRC_Spec_Info *spec = CRC_List;
-
 
 
     while( spec->name )
@@ -587,21 +509,20 @@ int test_crc_no_file(struct test_info_t  *test_info)
 
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
         int res = ucrc.get_crc(crc, "");
         if( res != -1 )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " no file but get_crc() ret:" << res << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " no file but get_crc() ret:" << res;
+            TEST_FAIL(ss.str().c_str());
         }
-
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
@@ -610,15 +531,11 @@ int test_crc_no_file(struct test_info_t  *test_info)
 
 
 
-int test_crc_for_cunks(struct test_info_t  *test_info)
+TEST(test_crc_for_cunks)
 {
-
-    TEST_INIT;
-
     uint64_t crc;
 
     const struct CRC_Spec_Info *spec = CRC_List;
-
 
 
     while( spec->name )
@@ -634,24 +551,23 @@ int test_crc_for_cunks(struct test_info_t  *test_info)
 
         if( crc != spec->check )
         {
-            std::cout << std::hex;
-            std::cout << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc << "\n";
-            return TEST_BROKEN;
+            std::stringstream ss;
+            ss << std::hex;
+            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
+            TEST_FAIL(ss.str().c_str());
         }
-
 
         spec++;
     }
 
 
-    return TEST_PASSED;
+    TEST_PASS(NULL);
 }
 
 
 
 ptest_func tests[] =
 {
-
     //CRC_t methods
     test_crc_t_name,
     test_crc_t_name_2,
@@ -679,10 +595,4 @@ ptest_func tests[] =
 
 
 
-int main(void)
-{
-
-    RUN_TESTS(tests);
-
-    return 0;
-}
+MAIN_TESTS(tests)
