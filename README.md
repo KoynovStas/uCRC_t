@@ -20,7 +20,7 @@
 - This class is universal, but it leads to extra work because the data type is `uint64_t`. This is not optimal.
 
 
-If you don't need such universality, you can use a more optimized template for your algorithm see:[CRC_CPP_Template](https://github.com/KoynovStas/CRC_CPP_Template)
+If you don't need such universality, you can use a more optimized template for your algorithm see:[CRC_t C++ Template](https://github.com/KoynovStas/CRC_t)
 
 
 Class parameters is the standard Specifications algorithms CRC as described in Ross N. Williams [A PAINLESS GUIDE TO CRC ERROR DETECTION ALGORITHMS.](http://www.ross.net/crc/download/crc_v3.txt)
