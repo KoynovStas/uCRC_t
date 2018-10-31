@@ -171,6 +171,21 @@ const uint8_t std_check_data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38
 
 
 
+static std::stringstream ss;
+static std::string       msg;
+
+
+void test_init(struct test_case_t *test_case)
+{
+    ss.clear();
+    ss.str(""); // clear ss
+    ss << std::hex;
+
+    msg.clear();
+}
+
+
+
 //------------- tests for CRC_t methods -------------
 
 
@@ -230,10 +245,9 @@ TEST(test_crc_t_get_poly)
 
         if( ucrc.get_poly() != spec->poly )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " poly must be: 0x" << spec->poly << " but get: 0x" << ucrc.get_poly();
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
         spec++;
@@ -257,10 +271,9 @@ TEST(test_crc_t_get_init)
 
         if( ucrc.get_init() != spec->init )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " init must be: 0x" << spec->init << " but get: 0x" << ucrc.get_init();
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
         spec++;
@@ -284,10 +297,9 @@ TEST(test_crc_t_get_xor_out)
 
         if( ucrc.get_xor_out() != spec->xor_out )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " xor_out must be: 0x" << spec->xor_out << " but get: 0x" << ucrc.get_xor_out();
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
         spec++;
@@ -390,19 +402,17 @@ TEST(test_crc_std_check_constructor)
         crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
         if( crc != spec->check )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
 
         if( ucrc.get_check() != spec->check )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check();
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
         spec++;
@@ -436,19 +446,17 @@ TEST(test_crc_std_check_set_xxx)
         crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
         if( crc != spec->check )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
 
         if( ucrc.get_check() != spec->check )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check();
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
 
@@ -482,10 +490,9 @@ TEST(test_crc_std_check_file)
         int res = ucrc.get_crc(crc, "std_file_to_test_crc");
         if( (res != 0) ||  (crc != spec->check) )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
         spec++;
@@ -512,10 +519,9 @@ TEST(test_crc_no_file)
         int res = ucrc.get_crc(crc, "");
         if( res != -1 )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " no file but get_crc() ret:" << res;
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
         spec++;
@@ -551,10 +557,9 @@ TEST(test_crc_for_cunks)
 
         if( crc != spec->check )
         {
-            std::stringstream ss;
-            ss << std::hex;
             ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
-            TEST_FAIL(ss.str().c_str());
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
         }
 
         spec++;
@@ -595,4 +600,7 @@ ptest_func tests[] =
 
 
 
-MAIN_TESTS(tests)
+TEST_CASE(test_case, tests, NULL, test_init, NULL)
+
+
+MAIN_CASE(test_case)
