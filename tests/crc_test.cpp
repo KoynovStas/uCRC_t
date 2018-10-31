@@ -128,8 +128,10 @@ const CRC_Spec_Info  CRC_List[] =
     { "CRC-16/XMODEM",      16, 0x1021, 0x0,    false, false, 0x0,    0x31C3 },
 
     // CRC-17
-    { "CRC-17/CAN-FD",     17, 0x1685B, 0x0, false, false, 0x0,  0x4F03},
+    { "CRC-17/CAN-FD",     17, 0x1685B, 0x0, false, false, 0x0,  0x4F03 },
 
+    // CRC-21
+    { "CRC-21/CAN-FD",     21, 0x102899, 0x0,false, false, 0x0,  0xED841 },
 
     // CRC-24
     { "CRC-24",            24, 0x864CFB, 0xB704CE, false, false, 0x0,      0x21CF02 },
