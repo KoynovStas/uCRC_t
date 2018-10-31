@@ -48,28 +48,26 @@
 
 uCRC_t::uCRC_t(const std::string & Name, uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut) :
     name    (Name),
-    bits    (Bits),
     poly    (Poly),
     init    (Init),
+    xor_out (XorOut),
+    bits    (Bits),
     ref_in  (RefIn),
-    ref_out (RefOut),
-    xor_out (XorOut)
+    ref_out (RefOut)
 {
-
     init_class();
 }
 
 
 
 uCRC_t::uCRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut) :
-    bits    (Bits),
     poly    (Poly),
     init    (Init),
+    xor_out (XorOut),
+    bits    (Bits),
     ref_in  (RefIn),
-    ref_out (RefOut),
-    xor_out (XorOut)
+    ref_out (RefOut)
 {
-
     init_class();
 }
 
@@ -89,10 +87,8 @@ int uCRC_t::set_bits(uint8_t new_value)
     if( (new_value < 1) || (new_value > 64) )
         return -1; //error
 
-
     bits = new_value;
     init_class();
-
 
     return 0; //good job
 }
@@ -145,7 +141,6 @@ int uCRC_t::get_crc(uint64_t &crc, const char *file_name, void *buf, size_t size
 
     fclose(stream);
 
-
     return res;
 }
 
@@ -176,7 +171,6 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile, void *buf, size_t size_buf) cons
 
 
     crc = get_final_crc(crc);
-
 
     return 0; //good  job
 }

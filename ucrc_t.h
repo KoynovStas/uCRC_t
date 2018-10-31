@@ -113,21 +113,19 @@ class uCRC_t
         uint64_t get_final_crc(uint64_t raw_crc) const;
 
 
-
     private:
-
-        uint8_t  bits;
         uint64_t poly;
         uint64_t init;
-        bool     ref_in;
-        bool     ref_out;
         uint64_t xor_out;
-
-        uint8_t  shift;
-        uint64_t crc_init;
+        uint64_t crc_init;  //crc_init = reflect(init, bits) if RefIn, else = init
         uint64_t top_bit;
         uint64_t crc_mask;
         uint64_t crc_table[256];
+
+        uint8_t  bits;
+        uint8_t  shift;
+        bool     ref_in;
+        bool     ref_out;
 
 
         uint64_t reflect(uint64_t data, uint8_t num_bits) const;
