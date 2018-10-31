@@ -113,66 +113,34 @@ int uCRC_t::get_crc(uint64_t &crc, const char* file_name) const
 
 
 
-int uCRC_t::get_crc(uint64_t &crc, FILE *pfile) const
-{
-    char buf[4096];
-
-    return get_crc(crc, pfile, buf, sizeof(buf));
-}
-
-
-
 int uCRC_t::get_crc(uint64_t &crc, const char *file_name, void *buf, size_t size_buf) const
 {
-    if( !file_name )
+    std::ifstream ifs(file_name, std::ios_base::binary);
+
+    if( !ifs || !buf || !size_buf)
     {
         errno = EINVAL;
         return -1;
     }
 
-
-    FILE *stream = fopen(file_name, "rb");
-    if( stream == NULL )
-        return -1; //Cant open file
-
-
-    int res = get_crc(crc, stream, buf, size_buf);
-
-
-    fclose(stream);
-
-    return res;
+    return get_crc(crc, ifs, buf, size_buf);
 }
 
 
 
-int uCRC_t::get_crc(uint64_t &crc, FILE *pfile, void *buf, size_t size_buf) const
+int uCRC_t::get_crc(uint64_t &crc, std::ifstream &ifs, void *buf, size_t size_buf) const
 {
-    if( !pfile || !buf || (size_buf == 0) )
+    crc = crc_init;
+
+    while( ifs )
     {
-        errno = EINVAL;
-        return -1;
+        ifs.read(static_cast<char *>(buf), size_buf);
+        crc = get_raw_crc(buf, ifs.gcount(), crc);
     }
-
-
-    crc          = crc_init;
-    long cur_pos = ftell(pfile);
-    rewind(pfile);
-
-
-    while( !feof(pfile) )
-    {
-       size_t len = fread(buf, 1, size_buf, pfile);
-       crc = get_raw_crc(buf, len, crc);
-    }
-
-
-    fseek(pfile, cur_pos, SEEK_SET); // restore old position in file
-
 
     crc = get_final_crc(crc);
 
-    return 0; //good  job
+    return (ifs.rdstate() & std::ios_base::badbit); //return 0 if all good
 }
 
 

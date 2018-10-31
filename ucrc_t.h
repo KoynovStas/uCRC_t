@@ -46,7 +46,8 @@
 
 #include <stdint.h>
 #include <string>
-#include <cstdio>
+#include <fstream>    // for std::ifstream
+#include <ios>        // for std::ios_base, etc.
 
 
 
@@ -103,9 +104,7 @@ class uCRC_t
         // Calculate methods
         uint64_t get_crc(const void* data, size_t len) const;
         int      get_crc(uint64_t &crc, const char* file_name) const;
-        int      get_crc(uint64_t &crc, FILE* pfile) const;
         int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
-        int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
 
 
         // Calculate for chunks of data
@@ -131,6 +130,8 @@ class uCRC_t
         uint64_t reflect(uint64_t data, uint8_t num_bits) const;
         void     init_crc_table();
         void     init_class();
+
+        int      get_crc(uint64_t &crc, std::ifstream& ifs, void* buf, size_t size_buf) const;
 };
 
 
