@@ -185,7 +185,7 @@ int uCRC_t::get_crc(uint64_t &crc, FILE *pfile, void *buf, size_t size_buf) cons
 
 uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t crc) const
 {
-    register const uint8_t* buf = static_cast< const uint8_t* >(data);
+    const uint8_t* buf = static_cast< const uint8_t* >(data);
 
 
     if(bits > 8)
