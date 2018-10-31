@@ -228,14 +228,11 @@ uint64_t uCRC_t::get_final_crc(uint64_t raw_crc) const
 uint64_t uCRC_t::reflect(uint64_t data, uint8_t num_bits) const
 {
     uint64_t reflection = 0;
-    uint64_t one = 1;
 
-    for ( size_t i = 0; i < num_bits; ++i, data >>= 1 )
+    while( num_bits-- )
     {
-        if ( data & one )
-        {
-            reflection |= ( one << (num_bits - one - i) );
-        }
+        reflection = (reflection << 1) | (data & 1);
+        data >>= 1;
     }
 
     return reflection;
@@ -245,7 +242,6 @@ uint64_t uCRC_t::reflect(uint64_t data, uint8_t num_bits) const
 
 void uCRC_t::init_crc_table()
 {
-
     //Calculation of the standard CRC table for byte.
     for(int i = 0; i < 256; i++)
     {
