@@ -1,15 +1,14 @@
-# uCRC_t - is C++ class for calculation CRC sizes 1-64 bits
+# uCRC_t - is C++ class for calculation CRC any sizes 1-64 bits
 
 
 ## Description
 
-`uCRC_t` is universal C++ class for calculation CRC sizes(width) 1-64 bits.
+`uCRC_t` is universal C++ class for calculation CRC any sizes(width) 1-64 bits.
 
 
 #### Features of the implementation:
 
- - The code uses only the standard **C++03 not C++11** -> This allows you to use the class in the oldest projects with older compilers.
- - In the code not uses the library boost.
+ - The code uses only the standard **C++03** -> This allows you to use the class in the oldest projects with older compilers.
  - The code has no dependencies.
  - You can change the parameters of the algorithm CRC in Run-Time, see `set_xxx` methods.
  - For **any** bit-depth (width) of CRC will be use the standard table method for calculation. Will be calculated standart table for byte (table size 256 elements)
@@ -125,9 +124,7 @@ void set_xor_out(uint64_t new_value) { xor_out = new_value;}
 // Calculate methods
 uint64_t get_crc(const void* data, size_t len) const;
 int      get_crc(uint64_t &crc, const char* file_name) const;
-int      get_crc(uint64_t &crc, FILE* pfile) const;
 int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
-int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
 
 
 // Calculate for chunks of data
@@ -145,7 +142,12 @@ More details see: **[ucrc_t.h](./ucrc_t.h)**
 
 1. You need to include **[ucrc_t.h](./ucrc_t.h)** file in your **.cpp** file.
 2. And add file **[ucrc_t.cpp](./ucrc_t.cpp)** to list of source files to compile.
-3. Set parameters in a class (see an examples).
+3. Set parameters to a class (see an examples).
+
+**Note:**
+> The parameters for the class correspond to the `Ross N. Williams` specification. A list of CRC algorithms for this specification can be found here: [Catalogue CRC algorithms](http://reveng.sourceforge.net/crc-catalogue/all.htm)
+
+
 
 
 
@@ -160,29 +162,25 @@ uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
 
 int res = ucrc.get_crc(crc, "std_file_to_test_crc"); // res == -1 (error); res == 0 (good)
 
-if( res != -1 )
+if( res == 0 )
     //uses crc
 ```
 
 
-### Note: methods for calculate CRC file
-
-```C++
-int      get_crc(uint64_t &crc, const char* file_name) const;
-int      get_crc(uint64_t &crc, FILE* pfile) const;
-```
-These methods are reentrant. They use a buffer on the stack.
-The buffer size is 4 Kib (4096 bytes) - which is optimal for most systems.
-If you have a buffer or needs aligned buffer, you can use the following methods:
-
-```C++
-int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
-int      get_crc(uint64_t &crc, FILE* pfile, void* buf, size_t size_buf) const;
-```
-
-The method which uses FILE* set the file pointer(pos) to the beginning.
-After work, the file position is returned to the original position before the work function `get_crc()`.
-
+**Note:**
+>
+>  methods for calculate CRC file
+>
+>  ```C++
+>  int get_crc(uint64_t &crc, const char* file_name) const;
+>  ```
+>  These method are reentrant. He use a buffer on the stack.
+>  The buffer size is 4 Kib (4096 bytes) which is optimal for most   systems.
+>  If you have a buffer or needs aligned buffer, you can use the following method:
+>
+>  ```C++
+>  int get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
+>  ```
 
 **Get CRC-32 for single buf:**
 
@@ -212,24 +210,24 @@ crc = ucrc.get_crc(buf, len_of_buf);
 ```
 
 
-**Get CRC-32 for buf(s) (chunks):**
+**Get CRC-8 for buf(s) (chunks):**
 
 **Note:**
-when the method is used `uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc)`
+> when the method is used `uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc)`
 for the first byte (or chunk of data) **crc** param must be obtained through a method `get_crc_init()` and in the final you need to call the method: `get_final_crc()`:
 
 ```C++
 char buf[len_of_buf];   //bla bla
 char buf2[len_of_buf2]; //bla bla
 
-uint32_t crc;
+uint8_t crc;
 
-uCRC_t ucrc(32, 0x04C11DB7, 0xFFFFFFFF, true, true, 0xFFFFFFFF);
+uCRC_t ucrc(8, 0x7,  0x0, false, false, 0x0);
 
 crc = ucrc.get_crc_init();
 crc = ucrc.get_raw_crc(buf,  len_of_buf,  crc);  //first chunk
-crc = ucrc.get_raw_crc(buf2, len_of_buf2, crr);  //second chunk
-crc = get_final_crc(crc);
+crc = ucrc.get_raw_crc(buf2, len_of_buf2, crc);  //second chunk
+crc = ucrc.get_final_crc(crc);
 
 //uses crc
 ```
