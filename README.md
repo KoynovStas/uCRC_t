@@ -22,7 +22,7 @@
 If you don't need such universality, you can use a more optimized template for your algorithm see:[CRC_t C++ Template](https://github.com/KoynovStas/CRC_t)
 
 
-Class parameters is the standard Specifications algorithms CRC as described in Ross N. Williams [A PAINLESS GUIDE TO CRC ERROR DETECTION ALGORITHMS.](http://www.ross.net/crc/download/crc_v3.txt)
+Class parameters is the standard Specifications algorithms CRC as described in Ross N. Williams [A PAINLESS GUIDE TO CRC ERROR DETECTION ALGORITHMS](./doc/crc_v3.txt)
 
 
 **Ross N. Williams:**
