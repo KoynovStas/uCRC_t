@@ -129,7 +129,7 @@ int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_bu
 
 // Calculate for chunks of data
 uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc) const; //for first byte crc = crc_init (must be)
-uint64_t get_final_crc(uint64_t raw_crc) const;
+uint64_t get_end_crc(uint64_t raw_crc) const;
 ```
 
 More details see: **[ucrc_t.h](./ucrc_t.h)**
@@ -214,7 +214,7 @@ crc = ucrc.get_crc(buf, len_of_buf);
 
 **Note:**
 > when the method is used `uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc)`
-for the first byte (or chunk of data) **crc** param must be obtained through a method `get_crc_init()` and in the final you need to call the method: `get_final_crc()`:
+for the first byte (or chunk of data) **crc** param must be obtained through a method `get_crc_init()` and in the final you need to call the method: `get_end_crc()`:
 
 ```C++
 char buf[len_of_buf];   //bla bla
@@ -227,7 +227,7 @@ uCRC_t ucrc(8, 0x7,  0x0, false, false, 0x0);
 crc = ucrc.get_crc_init();
 crc = ucrc.get_raw_crc(buf,  len_of_buf,  crc);  //first chunk
 crc = ucrc.get_raw_crc(buf2, len_of_buf2, crc);  //second chunk
-crc = ucrc.get_final_crc(crc);
+crc = ucrc.get_end_crc(crc);
 
 //uses crc
 ```
