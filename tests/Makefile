@@ -1,8 +1,8 @@
-CPPFLAGS += -O2  -s  -Wall
-CPPFLAGS += -D__USE_MINGW_ANSI_STDIO=1  #-DWITHOUT_CONSOLE_COLOR
-CPPFLAGS += -I..
-CPP       =  g++
-#CPP       =  arm-gcc_4.9.2_cortex_a15-linux-uclibcgnueabi-g++
+CXXFLAGS += -std=c++03 -O2 -s -Wall
+CXXFLAGS += -D__USE_MINGW_ANSI_STDIO=1
+CXXFLAGS += -I..
+CXX      ?=  g++
+#CXX       =  arm-gcc_4.9.2_cortex_a15-linux-uclibcgnueabi-g++
 
 
 
@@ -10,10 +10,34 @@ CPP       =  g++
 TESTS  = crc_test
 
 
+ifeq ($(OS),Windows_NT)
+    BIN_SUFFIX  = .exe
+    BIN_TESTS   = $(addsuffix $(BIN_SUFFIX), $(TESTS))
+else
+    BIN_TESTS   = $(TESTS)
+endif
+
+
 
 
 .PHONY: all
-all: clean  $(TESTS)
+all: $(BIN_TESTS)
+	@for test in $(BIN_TESTS) ; do  \
+        ./$$test ; \
+    done
+
+
+
+%$(BIN_SUFFIX): %.cpp ../ucrc_t.cpp ../ucrc_t.h
+	$(CXX) $< ../ucrc_t.cpp -o $@  $(CXXFLAGS)
+	@echo "  ---- Compiled $@ ----"
+
+
+
+.PHONY: asm
+asm:
+	$(CXX)  crc_test.cpp  $(CXXFLAGS) -S
+	$(CXX)  ../ucrc_t.cpp $(CXXFLAGS) -S
 
 
 
@@ -21,22 +45,8 @@ all: clean  $(TESTS)
 clean:
 	-@rm -f *.o
 	-@rm -f *.*~
-	-@rm -f $(TESTS)
-
-
-
-.PHONY: $(TESTS)
-$(TESTS):
-	$(CPP)  $@.cpp ../ucrc_t.cpp -o $@  $(CPPFLAGS)
-	@echo "  ---- Compiled $@ ----"
-	@./$@
-
-
-
-.PHONY: asm
-asm:
-	$(CPP)  crc_test.cpp  $(CPPFLAGS) -S
-	$(CPP)  ../ucrc_t.cpp $(CPPFLAGS) -S
+	-@rm -f *.s
+	-@rm -f $(BIN_TESTS)
 
 
 
@@ -45,7 +55,7 @@ asm:
 help:
 	@echo "make [command]"
 	@echo "command is:"
-	@echo "   clean   -  remove all binary files"
-	@echo "   all     -  clean and build all tests"
-	@echo "   asm     -  get ASM listing"
-	@echo "   help    -  This help"
+	@echo "   all    -  clean and build all tests"
+	@echo "   asm    -  get ASM listing"
+	@echo "   clean  -  remove all binary files"
+	@echo "   help   -  This help"
