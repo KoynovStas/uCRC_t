@@ -581,6 +581,39 @@ TEST(test_crc_for_cunks)
 
 
 
+TEST(test_crc_for_cunks2) //test with get_raw_crc for first chunk
+{
+    uint64_t crc;
+
+    const struct CRC_Spec_Info *spec = CRC_List;
+
+
+    while( spec->name )
+    {
+        uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
+
+
+        crc = ucrc.get_raw_crc(&std_check_data[0], 4);
+        crc = ucrc.get_raw_crc(&std_check_data[4], 5, crc);
+        crc = ucrc.get_end_crc(crc);
+
+        if( crc != spec->check )
+        {
+            ss << "For CRC: "      << spec->name
+               << " std check: 0x" << spec->check
+               << " but get: 0x"   << crc;
+            msg = ss.str();
+            TEST_FAIL(msg.c_str());
+        }
+
+        spec++;
+    }
+
+    TEST_PASS(NULL);
+}
+
+
+
 stest_func tests[] =
 {
     //CRC_t methods
@@ -606,6 +639,7 @@ stest_func tests[] =
     test_crc_no_file,
 
     test_crc_for_cunks,
+    test_crc_for_cunks2,
 };
 
 
