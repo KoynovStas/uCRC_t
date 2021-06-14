@@ -73,46 +73,6 @@ uCRC_t::uCRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefO
 
 
 
-uint64_t uCRC_t::get_check() const
-{
-    const uint8_t data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
-
-    return get_crc(data, sizeof(data));
-}
-
-
-
-int uCRC_t::set_bits(uint8_t new_value)
-{
-    if( (new_value < 1) || (new_value > 64) )
-        return -1; //error
-
-    bits = new_value;
-    init_class();
-
-    return 0; //good job
-}
-
-
-
-uint64_t uCRC_t::get_crc(const void* data, size_t len) const
-{
-    uint64_t crc = get_raw_crc(data, len, crc_init);
-
-    return get_final_crc(crc);
-}
-
-
-
-int uCRC_t::get_crc(uint64_t &crc, const char* file_name) const
-{
-    char buf[4096];
-
-    return get_crc(crc, file_name, buf, sizeof(buf));
-}
-
-
-
 int uCRC_t::get_crc(uint64_t &crc, const char *file_name, void *buf, size_t size_buf) const
 {
     std::ifstream ifs(file_name, std::ios_base::binary);
@@ -138,7 +98,7 @@ int uCRC_t::get_crc(uint64_t &crc, std::ifstream &ifs, void *buf, size_t size_bu
         crc = get_raw_crc(buf, ifs.gcount(), crc);
     }
 
-    crc = get_final_crc(crc);
+    crc = get_end_crc(crc);
 
     return (ifs.rdstate() & std::ios_base::badbit); //return 0 if all good
 }
@@ -171,18 +131,6 @@ uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t crc) const
 
 
     return crc;
-}
-
-
-
-uint64_t uCRC_t::get_final_crc(uint64_t raw_crc) const
-{
-    if(ref_out^ref_in) raw_crc = reflect(raw_crc, bits);
-
-    raw_crc ^= xor_out;
-    raw_crc &= crc_mask; //for CRC not power 2
-
-    return raw_crc;
 }
 
 

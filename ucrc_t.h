@@ -55,9 +55,7 @@
 
 class uCRC_t
 {
-
     public:
-
         explicit uCRC_t(const std::string& Name = "CRC-32",
                         uint8_t  Bits   = 32,
                         uint64_t Poly   = 0x04c11db7,
@@ -86,9 +84,9 @@ class uCRC_t
         bool     get_ref_in()  const { return ref_in; }
         bool     get_ref_out() const { return ref_out;}
 
-        uint64_t get_crc_init()const { return crc_init;} //crc_init = reflect(init, bits) if RefIn, else = init
         uint64_t get_top_bit() const { return top_bit; }
         uint64_t get_crc_mask()const { return crc_mask;}
+        uint64_t get_crc_init()const { return crc_init;} //crc_init = reflect(init, bits) if RefIn, else = init
         uint64_t get_check()   const;                    //crc for ASCII string "123456789" (i.e. 313233... (hexadecimal)).
 
 
@@ -96,9 +94,9 @@ class uCRC_t
         int  set_bits(uint8_t new_value);
         void set_poly(uint64_t new_value)    { poly    = new_value; init_class();}
         void set_init(uint64_t new_value)    { init    = new_value; init_class();}
+        void set_xor_out(uint64_t new_value) { xor_out = new_value;}
         void set_ref_in(bool new_value)      { ref_in  = new_value; init_class();}
         void set_ref_out(bool new_value)     { ref_out = new_value;}
-        void set_xor_out(uint64_t new_value) { xor_out = new_value;}
 
 
         // Calculate methods
@@ -109,7 +107,7 @@ class uCRC_t
 
         // Calculate for chunks of data
         uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc) const; //for first byte crc = crc_init (must be)
-        uint64_t get_final_crc(uint64_t raw_crc) const;
+        uint64_t get_end_crc(uint64_t raw_crc) const;
 
 
     private:
@@ -133,6 +131,57 @@ class uCRC_t
 
         int      get_crc(uint64_t &crc, std::ifstream& ifs, void* buf, size_t size_buf) const;
 };
+
+
+
+
+
+
+inline uint64_t uCRC_t::get_check() const
+{
+    const uint8_t data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39};
+
+    return get_crc(data, sizeof(data));
+}
+
+
+inline int uCRC_t::set_bits(uint8_t new_value)
+{
+    if( (new_value < 1) || (new_value > 64) )
+        return -1; //error
+
+    bits = new_value;
+    init_class();
+
+    return 0; //good job
+}
+
+
+inline uint64_t uCRC_t::get_crc(const void* data, size_t len) const
+{
+    uint64_t crc = get_raw_crc(data, len, crc_init);
+
+    return get_end_crc(crc);
+}
+
+
+inline int uCRC_t::get_crc(uint64_t& crc, const char* file_name) const
+{
+    char buf[4096];
+
+    return get_crc(crc, file_name, buf, sizeof(buf));
+}
+
+
+inline uint64_t uCRC_t::get_end_crc(uint64_t raw_crc) const
+{
+    if(ref_out^ref_in) raw_crc = reflect(raw_crc, bits);
+
+    raw_crc ^= xor_out;
+    raw_crc &= crc_mask; //for CRC not power 2
+
+    return raw_crc;
+}
 
 
 
