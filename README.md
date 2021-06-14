@@ -128,7 +128,8 @@ int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_bu
 
 
 // Calculate for chunks of data
-uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc) const; //for first byte crc = crc_init (must be)
+uint64_t get_raw_crc(const void* data, size_t len) const;                   //get raw_crc for first chunk of data
+uint64_t get_raw_crc(const void* data, size_t len, uint64_t raw_crc) const; //get raw_crc for chunk of data
 uint64_t get_end_crc(uint64_t raw_crc) const;
 ```
 
@@ -224,8 +225,7 @@ uint8_t crc;
 
 uCRC_t ucrc(8, 0x7,  0x0, false, false, 0x0);
 
-crc = ucrc.get_crc_init();
-crc = ucrc.get_raw_crc(buf,  len_of_buf,  crc);  //first chunk
+crc = ucrc.get_raw_crc(buf,  len_of_buf);        //first chunk (Since from version 1.4)
 crc = ucrc.get_raw_crc(buf2, len_of_buf2, crc);  //second chunk
 crc = ucrc.get_end_crc(crc);
 
