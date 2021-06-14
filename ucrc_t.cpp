@@ -105,7 +105,7 @@ int uCRC_t::get_crc(uint64_t &crc, std::ifstream &ifs, void *buf, size_t size_bu
 
 
 
-uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t crc) const
+uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t raw_crc) const
 {
     const uint8_t* buf = static_cast< const uint8_t* >(data);
 
@@ -114,23 +114,23 @@ uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t crc) const
     {
         if(ref_in)
             while (len--)
-                crc = (crc >> 8) ^ crc_table[ (crc ^ *buf++) & 0xff ];
+                raw_crc = (raw_crc >> 8) ^ crc_table[ (raw_crc ^ *buf++) & 0xff ];
         else
             while (len--)
-                crc = (crc << 8) ^ crc_table[ ((crc >> shift) ^ *buf++) & 0xff ];
+                raw_crc = (raw_crc << 8) ^ crc_table[ ((raw_crc >> shift) ^ *buf++) & 0xff ];
     }
     else
     {
         if (ref_in)
             while (len--)
-                crc = crc_table[ (crc ^ *buf++) & 0xff ];
+                raw_crc = crc_table[ (raw_crc ^ *buf++) & 0xff ];
         else
             while (len--)
-                crc = crc_table[ ((crc << shift) ^ *buf++) & 0xff ];
+                raw_crc = crc_table[ ((raw_crc << shift) ^ *buf++) & 0xff ];
     }
 
 
-    return crc;
+    return raw_crc;
 }
 
 

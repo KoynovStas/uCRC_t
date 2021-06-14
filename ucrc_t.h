@@ -106,7 +106,8 @@ class uCRC_t
 
 
         // Calculate for chunks of data
-        uint64_t get_raw_crc(const void* data, size_t len, uint64_t crc) const; //for first byte crc = crc_init (must be)
+        uint64_t get_raw_crc(const void* data, size_t len) const;                   //get raw_crc for first chunk of data
+        uint64_t get_raw_crc(const void* data, size_t len, uint64_t raw_crc) const; //get raw_crc for chunk of data
         uint64_t get_end_crc(uint64_t raw_crc) const;
 
 
@@ -145,6 +146,7 @@ inline uint64_t uCRC_t::get_check() const
 }
 
 
+
 inline int uCRC_t::set_bits(uint8_t new_value)
 {
     if( (new_value < 1) || (new_value > 64) )
@@ -157,6 +159,7 @@ inline int uCRC_t::set_bits(uint8_t new_value)
 }
 
 
+
 inline uint64_t uCRC_t::get_crc(const void* data, size_t len) const
 {
     uint64_t crc = get_raw_crc(data, len, crc_init);
@@ -165,12 +168,21 @@ inline uint64_t uCRC_t::get_crc(const void* data, size_t len) const
 }
 
 
+
 inline int uCRC_t::get_crc(uint64_t& crc, const char* file_name) const
 {
     char buf[4096];
 
     return get_crc(crc, file_name, buf, sizeof(buf));
 }
+
+
+
+inline uint64_t uCRC_t::get_raw_crc(const void* data, size_t len) const
+{
+    return get_raw_crc(data, len, crc_init);
+}
+
 
 
 inline uint64_t uCRC_t::get_end_crc(uint64_t raw_crc) const
