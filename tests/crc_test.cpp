@@ -188,6 +188,8 @@ static std::string       msg;
 
 void test_init(struct test_case_t *test_case)
 {
+    (void)test_case; //don't use
+
     ss.clear();
     ss.str(""); // clear ss
     ss << std::hex;
@@ -582,7 +584,7 @@ TEST(test_crc_for_cunks)
 
 
 
-ptest_func tests[] =
+stest_func tests[] =
 {
     //CRC_t methods
     test_crc_t_name,
