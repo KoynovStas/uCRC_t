@@ -562,7 +562,7 @@ TEST(test_crc_for_cunks)
         crc = ucrc.get_crc_init();
         crc = ucrc.get_raw_crc(&std_check_data[0], 4, crc);
         crc = ucrc.get_raw_crc(&std_check_data[4], 5, crc);
-        crc = ucrc.get_final_crc(crc);
+        crc = ucrc.get_end_crc(crc);
 
         if( crc != spec->check )
         {
