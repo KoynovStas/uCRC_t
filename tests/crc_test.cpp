@@ -240,7 +240,6 @@ TEST(test_crc_t_get_bits)
         spec++;
     }
 
-
     TEST_PASS(NULL);
 }
 
@@ -258,14 +257,15 @@ TEST(test_crc_t_get_poly)
 
         if( ucrc.get_poly() != spec->poly )
         {
-            ss << "For CRC: " << spec->name <<  " poly must be: 0x" << spec->poly << " but get: 0x" << ucrc.get_poly();
+            ss << "For CRC: "         << spec->name
+               << " poly must be: 0x" << spec->poly
+               << " but get: 0x"      << ucrc.get_poly();
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
 
         spec++;
     }
-
 
     TEST_PASS(NULL);
 }
@@ -284,14 +284,15 @@ TEST(test_crc_t_get_init)
 
         if( ucrc.get_init() != spec->init )
         {
-            ss << "For CRC: " << spec->name <<  " init must be: 0x" << spec->init << " but get: 0x" << ucrc.get_init();
+            ss << "For CRC: "         << spec->name
+               << " init must be: 0x" << spec->init
+               << " but get: 0x"      << ucrc.get_init();
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
 
         spec++;
     }
-
 
     TEST_PASS(NULL);
 }
@@ -310,14 +311,15 @@ TEST(test_crc_t_get_xor_out)
 
         if( ucrc.get_xor_out() != spec->xor_out )
         {
-            ss << "For CRC: " << spec->name <<  " xor_out must be: 0x" << spec->xor_out << " but get: 0x" << ucrc.get_xor_out();
+            ss << "For CRC: "            << spec->name
+               << " xor_out must be: 0x" << spec->xor_out
+               << " but get: 0x"         << ucrc.get_xor_out();
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
 
         spec++;
     }
-
 
     TEST_PASS(NULL);
 }
@@ -338,7 +340,6 @@ TEST(test_crc_t_get_ref_in)
         spec++;
     }
 
-
     TEST_PASS(NULL);
 }
 
@@ -358,7 +359,6 @@ TEST(test_crc_t_get_ref_out)
         spec++;
     }
 
-
     TEST_PASS(NULL);
 }
 
@@ -368,10 +368,7 @@ TEST(test_crc_t_set_bits)
 {
     uCRC_t crc(1, 0, 0, true, true, 0);
 
-
-    TEST_ASSERT( crc.get_bits() == 1 );
-
-
+    TEST_ASSERT( crc.get_bits()  == 1  );
     TEST_ASSERT( crc.set_bits(0) == -1 );
 
     // 1..64
@@ -387,7 +384,6 @@ TEST(test_crc_t_set_bits)
     {
         TEST_ASSERT( crc.set_bits(i) == -1 );
     }
-
 
     TEST_PASS(NULL);
 }
@@ -406,16 +402,16 @@ TEST(test_crc_std_check_constructor)
     const struct CRC_Spec_Info *spec = CRC_List;
 
 
-
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
         crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
         if( crc != spec->check )
         {
-            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
+            ss << "For CRC: "      << spec->name
+               << " std check: 0x" << spec->check
+               << " but get: 0x"   << crc;
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
@@ -423,14 +419,15 @@ TEST(test_crc_std_check_constructor)
 
         if( ucrc.get_check() != spec->check )
         {
-            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check();
+            ss << "For CRC: "          << spec->name
+               << " std check: 0x"     << spec->check
+               << " but get_check: 0x" << ucrc.get_check();
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
 
         spec++;
     }
-
 
     TEST_PASS(NULL);
 }
@@ -448,7 +445,6 @@ TEST(test_crc_std_check_set_xxx)
 
     while( spec->name )
     {
-
         ucrc.set_bits(spec->bits);
         ucrc.set_poly(spec->poly);
         ucrc.set_init(spec->init);
@@ -459,7 +455,9 @@ TEST(test_crc_std_check_set_xxx)
         crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
         if( crc != spec->check )
         {
-            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
+            ss << "For CRC: "      << spec->name
+               << " std check: 0x" << spec->check
+               << " but get: 0x"   << crc;
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
@@ -467,15 +465,15 @@ TEST(test_crc_std_check_set_xxx)
 
         if( ucrc.get_check() != spec->check )
         {
-            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get_check: 0x" << ucrc.get_check();
+            ss << "For CRC: "          << spec->name
+               << " std check: 0x"     << spec->check
+               << " but get_check: 0x" << ucrc.get_check();
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
 
-
         spec++;
     }
-
 
     TEST_PASS(NULL);
 }
@@ -496,21 +494,21 @@ TEST(test_crc_std_check_file)
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
 
         int res = ucrc.get_crc(crc, "std_file_to_test_crc");
         if( (res != 0) ||  (crc != spec->check) )
         {
-            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
+            ss << "For CRC: "      << spec->name
+               << " std check: 0x" << spec->check
+               << " but get: 0x"   << crc;
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
 
         spec++;
     }
-
 
     TEST_PASS(NULL);
 }
@@ -526,20 +524,19 @@ TEST(test_crc_no_file)
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
         int res = ucrc.get_crc(crc, "");
         if( res != -1 )
         {
-            ss << "For CRC: " << spec->name <<  " no file but get_crc() ret:" << res;
+            ss << "For CRC: "                   << spec->name
+               << " no file but get_crc() ret:" << res;
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
 
         spec++;
     }
-
 
     TEST_PASS(NULL);
 }
@@ -559,7 +556,6 @@ TEST(test_crc_for_cunks)
 
     while( spec->name )
     {
-
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
 
@@ -570,14 +566,15 @@ TEST(test_crc_for_cunks)
 
         if( crc != spec->check )
         {
-            ss << "For CRC: " << spec->name <<  " std check: 0x" << spec->check << " but get: 0x" << crc;
+            ss << "For CRC: "      << spec->name
+               << " std check: 0x" << spec->check
+               << " but get: 0x"   << crc;
             msg = ss.str();
             TEST_FAIL(msg.c_str());
         }
 
         spec++;
     }
-
 
     TEST_PASS(NULL);
 }
