@@ -151,7 +151,6 @@ More details see: **[ucrc_t.h](./ucrc_t.h)**
 
 
 
-
 ## Examples
 
 **Get CRC-32 for file:**
@@ -233,6 +232,18 @@ crc = ucrc.get_end_crc(crc);
 ```
 
 More details can be found in the test application: **[crc_test.cpp](./crc_test.cpp)**
+
+
+
+## Tests
+
+To run tests, perform the following steps:
+
+```
+cd tests
+cmake . -B ./build
+cmake --build build
+```
 
 
 
