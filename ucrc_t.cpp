@@ -135,7 +135,7 @@ uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t raw_crc) con
 
 
 
-uint64_t uCRC_t::reflect(uint64_t data, uint8_t num_bits) const
+uint64_t uCRC_t::reflect(uint64_t data, uint8_t num_bits)
 {
     uint64_t reflection = 0;
 

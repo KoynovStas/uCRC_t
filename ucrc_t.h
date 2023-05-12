@@ -126,7 +126,7 @@ class uCRC_t
         bool     ref_out;
 
 
-        uint64_t reflect(uint64_t data, uint8_t num_bits) const;
+        static uint64_t reflect(uint64_t data, uint8_t num_bits);
         void     init_crc_table();
         void     init_class();
 
