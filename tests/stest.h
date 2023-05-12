@@ -71,8 +71,8 @@
 
 //Uncomment if you want use snprintf from libc
 #ifndef stest_snprintf
-//    #include <stdio.h>
-//    #define  stest_snprintf  snprintf
+    #include <stdio.h>
+    #define  stest_snprintf  snprintf
 #endif
 
 

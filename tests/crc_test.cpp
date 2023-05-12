@@ -1,8 +1,8 @@
-#include <iostream>
-#include <sstream>
+#define __STDC_FORMAT_MACROS //for MinGW
+#include <inttypes.h>
+
 #include "stest.h"
 #include "ucrc_t.h"
-
 
 
 
@@ -182,23 +182,6 @@ const uint8_t std_check_data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38
 
 
 
-static std::stringstream ss;
-static std::string       msg;
-
-
-void test_init(struct test_case_t *test_case)
-{
-    (void)test_case; //don't use
-
-    ss.clear();
-    ss.str(""); // clear ss
-    ss << std::hex;
-
-    msg.clear();
-}
-
-
-
 //------------- tests for CRC_t methods -------------
 
 
@@ -254,16 +237,11 @@ TEST(test_crc_t_get_poly)
     {
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
-        if( ucrc.get_poly() != spec->poly )
-        {
-            ss << "For CRC: "         << spec->name
-               << " poly must be: 0x" << spec->poly
-               << " but get: 0x"      << ucrc.get_poly();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
-
+        TEST_ASSERTF(ucrc.get_poly() == spec->poly,
+                     "For CRC: %s poly must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->poly,
+                     ucrc.get_poly());
         spec++;
     }
 
@@ -281,15 +259,11 @@ TEST(test_crc_t_get_init)
     {
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
-        if( ucrc.get_init() != spec->init )
-        {
-            ss << "For CRC: "         << spec->name
-               << " init must be: 0x" << spec->init
-               << " but get: 0x"      << ucrc.get_init();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(ucrc.get_init() == spec->init,
+                     "For CRC: %s init must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->init,
+                     ucrc.get_init());
 
         spec++;
     }
@@ -308,15 +282,11 @@ TEST(test_crc_t_get_xor_out)
     {
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
-        if( ucrc.get_xor_out() != spec->xor_out )
-        {
-            ss << "For CRC: "            << spec->name
-               << " xor_out must be: 0x" << spec->xor_out
-               << " but get: 0x"         << ucrc.get_xor_out();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(ucrc.get_xor_out() == spec->xor_out,
+                     "For CRC: %s xor_out must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->xor_out,
+                     ucrc.get_xor_out());
 
         spec++;
     }
@@ -407,24 +377,19 @@ TEST(test_crc_std_check_constructor)
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
         crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
-        if( crc != spec->check )
-        {
-            ss << "For CRC: "      << spec->name
-               << " std check: 0x" << spec->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+
+        TEST_ASSERTF(crc == spec->check,
+                     "For CRC: %s check must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->check,
+                     crc);
 
 
-        if( ucrc.get_check() != spec->check )
-        {
-            ss << "For CRC: "          << spec->name
-               << " std check: 0x"     << spec->check
-               << " but get_check: 0x" << ucrc.get_check();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(ucrc.get_check() == spec->check,
+                     "For CRC: %s std check must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->check,
+                     ucrc.get_check());
 
         spec++;
     }
@@ -453,24 +418,18 @@ TEST(test_crc_std_check_set_xxx)
         ucrc.set_xor_out(spec->xor_out);
 
         crc = ucrc.get_crc(std_check_data, sizeof(std_check_data));
-        if( crc != spec->check )
-        {
-            ss << "For CRC: "      << spec->name
-               << " std check: 0x" << spec->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(crc == spec->check,
+                     "For CRC: %s std check must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->check,
+                     crc);
 
 
-        if( ucrc.get_check() != spec->check )
-        {
-            ss << "For CRC: "          << spec->name
-               << " std check: 0x"     << spec->check
-               << " but get_check: 0x" << ucrc.get_check();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(ucrc.get_check() == spec->check,
+                     "For CRC: %s std check must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->check,
+                     ucrc.get_check());
 
         spec++;
     }
@@ -496,16 +455,13 @@ TEST(test_crc_std_check_file)
     {
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
         int res = ucrc.get_crc(crc, "std_file_to_test_crc");
-        if( (res != 0) ||  (crc != spec->check) )
-        {
-            ss << "For CRC: "      << spec->name
-               << " std check: 0x" << spec->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+
+        TEST_ASSERTF((res == 0) && (crc == spec->check),
+                     "For CRC: %s std check must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->check,
+                     crc);
 
         spec++;
     }
@@ -527,13 +483,10 @@ TEST(test_crc_no_file)
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
         int res = ucrc.get_crc(crc, "");
-        if( res != -1 )
-        {
-            ss << "For CRC: "                   << spec->name
-               << " no file but get_crc() ret:" << res;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(res == -1,
+                     "For CRC: %s no file but get_crc() ret: %d",
+                     spec->name,
+                     res);
 
         spec++;
     }
@@ -564,14 +517,11 @@ TEST(test_crc_for_cunks)
         crc = ucrc.get_raw_crc(&std_check_data[4], 5, crc);
         crc = ucrc.get_end_crc(crc);
 
-        if( crc != spec->check )
-        {
-            ss << "For CRC: "      << spec->name
-               << " std check: 0x" << spec->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(crc == spec->check,
+                     "For CRC: %s std check must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->check,
+                     crc);
 
         spec++;
     }
@@ -592,19 +542,15 @@ TEST(test_crc_for_cunks2) //test with get_raw_crc for first chunk
     {
         uCRC_t ucrc(spec->bits, spec->poly, spec->init, spec->ref_in, spec->ref_out, spec->xor_out);
 
-
         crc = ucrc.get_raw_crc(&std_check_data[0], 4);
         crc = ucrc.get_raw_crc(&std_check_data[4], 5, crc);
         crc = ucrc.get_end_crc(crc);
 
-        if( crc != spec->check )
-        {
-            ss << "For CRC: "      << spec->name
-               << " std check: 0x" << spec->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(crc == spec->check,
+                     "For CRC: %s std check must be: 0x%" PRIX64 " but get: 0x%" PRIX64,
+                     spec->name,
+                     spec->check,
+                     crc);
 
         spec++;
     }
@@ -644,7 +590,4 @@ stest_func tests[] =
 
 
 
-TEST_CASE(test_case, tests, NULL, test_init, NULL)
-
-
-MAIN_CASE(test_case)
+MAIN_TESTS(tests)
