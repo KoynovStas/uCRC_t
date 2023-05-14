@@ -1,8 +1,8 @@
 /*
- * ucrc_t.h
+ * uCRC_t - is C++ class for calculation CRC any sizes 1-64 bits
  *
  *
- * version 1.3
+ * version 1.4
  *
  *
  * BSD 3-Clause License
@@ -132,7 +132,6 @@ class uCRC_t
 
         int      get_crc(uint64_t &crc, std::ifstream& ifs, void* buf, size_t size_buf) const;
 };
-
 
 
 

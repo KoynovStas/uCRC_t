@@ -12,6 +12,37 @@ Copyright (c) 2015, Koynov Stas - skojnov@yandex.ru
 ---
 
 
+## [v1.4](https://github.com/KoynovStas/uCRC_t/tree/v1.4) (2023-05-14)
+[Full Changelog](https://github.com/KoynovStas/uCRC_t/compare/v1.3...v1.4)
+
+
+### New
+ - Pro: use cmake for build tests
+ - add method `get_raw_crc` for first chunk of data
+
+
+### Refactoring
+ - add prefix `static` for `reflect` method
+ - rename `get_final_crc` -> `get_end_crc`
+ - update `STest` to ver 2.1
+
+
+### Tests
+ - add to CRC list `CRC-64/MS`
+ - add to CRC list `CRC-64/REDIS`
+ - add to CRC list `CRC-32/MEF`
+ - add to CRC list `CRC-24/OS-9`
+ - add to CRC list `CRC-21/CAN-FD`
+ - add to CRC list `CRC-17/CAN-FD`
+ - add to CRC list `CRC-16/M17`
+ - add to CRC list `CRC-16/NRSC-5`
+ - add to CRC list `CRC-8/HITAG`
+ - add to CRC list `CRC-8/BLUETOOTH`
+ - add to CRC list `CRC-8/NRSC-5`
+ - add to CRC list `CRC-8/LTE`
+
+
+
 
 ## [v1.3](https://github.com/KoynovStas/uCRC_t/tree/v1.3) (2017-05-03)
 [Full Changelog](https://github.com/KoynovStas/uCRC_t/compare/v1.2...v1.3)

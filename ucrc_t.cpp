@@ -1,8 +1,8 @@
 /*
- * ucrc_t.cpp
+ * uCRC_t - is C++ class for calculation CRC any sizes 1-64 bits
  *
  *
- * version 1.3
+ * version 1.4
  *
  *
  * BSD 3-Clause License
