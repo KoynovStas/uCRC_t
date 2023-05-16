@@ -46,7 +46,13 @@
 
 
 
-uCRC_t::uCRC_t(const std::string & Name, uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut) :
+uCRC_t::uCRC_t(const std::string& Name,
+               uint8_t  Bits,
+               uint64_t Poly,
+               uint64_t Init,
+               bool     RefIn,
+               bool     RefOut,
+               uint64_t XorOut) noexcept:
     name    (Name),
     poly    (Poly),
     init    (Init),
@@ -60,7 +66,12 @@ uCRC_t::uCRC_t(const std::string & Name, uint8_t Bits, uint64_t Poly, uint64_t I
 
 
 
-uCRC_t::uCRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefOut, uint64_t XorOut) :
+uCRC_t::uCRC_t(uint8_t  Bits,
+               uint64_t Poly,
+               uint64_t Init,
+               bool     RefIn,
+               bool     RefOut,
+               uint64_t XorOut) noexcept:
     poly    (Poly),
     init    (Init),
     xor_out (XorOut),
@@ -73,7 +84,7 @@ uCRC_t::uCRC_t(uint8_t Bits, uint64_t Poly, uint64_t Init, bool RefIn, bool RefO
 
 
 
-int uCRC_t::get_crc(uint64_t &crc, const char *file_name, void *buf, size_t size_buf) const
+int uCRC_t::get_crc(uint64_t &crc, const char *file_name, void *buf, size_t size_buf) const noexcept
 {
     std::ifstream ifs(file_name, std::ios_base::binary);
 
@@ -88,7 +99,7 @@ int uCRC_t::get_crc(uint64_t &crc, const char *file_name, void *buf, size_t size
 
 
 
-int uCRC_t::get_crc(uint64_t &crc, std::ifstream &ifs, void *buf, size_t size_buf) const
+int uCRC_t::get_crc(uint64_t &crc, std::ifstream &ifs, void *buf, size_t size_buf) const noexcept
 {
     crc = crc_init;
 
@@ -105,9 +116,9 @@ int uCRC_t::get_crc(uint64_t &crc, std::ifstream &ifs, void *buf, size_t size_bu
 
 
 
-uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t raw_crc) const
+uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t raw_crc) const noexcept
 {
-    const uint8_t* buf = static_cast< const uint8_t* >(data);
+    auto buf = static_cast< const uint8_t* >(data);
 
 
     if(bits > 8)
@@ -135,7 +146,7 @@ uint64_t uCRC_t::get_raw_crc(const void* data, size_t len, uint64_t raw_crc) con
 
 
 
-uint64_t uCRC_t::reflect(uint64_t data, uint8_t num_bits)
+uint64_t uCRC_t::reflect(uint64_t data, uint8_t num_bits) noexcept
 {
     uint64_t reflection = 0;
 
@@ -150,7 +161,7 @@ uint64_t uCRC_t::reflect(uint64_t data, uint8_t num_bits)
 
 
 
-void uCRC_t::init_crc_table()
+void uCRC_t::init_crc_table() noexcept
 {
     //Calculation of the standard CRC table for byte.
     for(int i = 0; i < 256; i++)
@@ -185,7 +196,7 @@ void uCRC_t::init_crc_table()
 
 
 
-void uCRC_t::init_class()
+void uCRC_t::init_class() noexcept
 {
     top_bit  = (uint64_t)1 << (bits - 1);
     crc_mask = ( (top_bit - 1) << 1) | 1;

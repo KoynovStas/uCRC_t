@@ -218,7 +218,7 @@ TEST(test_crc_t_name_2)
 
 TEST(test_crc_t_get_bits)
 {
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -237,7 +237,7 @@ TEST(test_crc_t_get_bits)
 
 TEST(test_crc_t_get_poly)
 {
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -259,7 +259,7 @@ TEST(test_crc_t_get_poly)
 
 TEST(test_crc_t_get_init)
 {
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -282,7 +282,7 @@ TEST(test_crc_t_get_init)
 
 TEST(test_crc_t_get_xor_out)
 {
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -305,7 +305,7 @@ TEST(test_crc_t_get_xor_out)
 
 TEST(test_crc_t_get_ref_in)
 {
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -324,7 +324,7 @@ TEST(test_crc_t_get_ref_in)
 
 TEST(test_crc_t_get_ref_out)
 {
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -376,7 +376,7 @@ TEST(test_crc_std_check_constructor)
 {
     uint64_t crc;
 
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -411,7 +411,7 @@ TEST(test_crc_std_check_set_xxx)
 {
     uint64_t crc;
 
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
     uCRC_t ucrc;
 
 
@@ -455,7 +455,7 @@ TEST(test_crc_std_check_file)
 {
     uint64_t crc;
 
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -482,7 +482,7 @@ TEST(test_crc_no_file)
 {
     uint64_t crc;
 
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -511,7 +511,7 @@ TEST(test_crc_for_cunks)
 {
     uint64_t crc;
 
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
@@ -542,7 +542,7 @@ TEST(test_crc_for_cunks2) //test with get_raw_crc for first chunk
 {
     uint64_t crc;
 
-    const struct CRC_Spec_Info *spec = CRC_List;
+    auto spec = CRC_List;
 
 
     while( spec->name )
