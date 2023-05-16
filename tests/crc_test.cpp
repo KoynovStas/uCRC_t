@@ -1,5 +1,5 @@
 #define __STDC_FORMAT_MACROS //for MinGW
-#include <inttypes.h>
+#include <cinttypes>
 
 #include "stest.h"
 #include "ucrc_t.h"

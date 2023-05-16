@@ -38,9 +38,9 @@
  *
  */
 
-#include "ucrc_t.h"
 #include <cstdio>
-#include <errno.h>
+#include <cerrno>
+#include "ucrc_t.h"
 
 
 
