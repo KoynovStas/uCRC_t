@@ -40,26 +40,27 @@
 
 #include <cstdio>
 #include <cerrno>
+#include <utility>
 #include "ucrc_t.h"
 
 
 
 
 
-uCRC_t::uCRC_t(const std::string& Name,
-               uint8_t  Bits,
-               uint64_t Poly,
-               uint64_t Init,
-               bool     RefIn,
-               bool     RefOut,
-               uint64_t XorOut) noexcept:
-    name    (Name),
-    poly    (Poly),
-    init    (Init),
-    xor_out (XorOut),
-    bits    (Bits),
-    ref_in  (RefIn),
-    ref_out (RefOut)
+uCRC_t::uCRC_t(std::string Name,
+               uint8_t     Bits,
+               uint64_t    Poly,
+               uint64_t    Init,
+               bool        RefIn,
+               bool        RefOut,
+               uint64_t    XorOut) noexcept:
+    name   (std::move(Name)),
+    poly   (Poly),
+    init   (Init),
+    xor_out(XorOut),
+    bits   (Bits),
+    ref_in (RefIn),
+    ref_out(RefOut)
 {
     init_class();
 }
@@ -72,12 +73,12 @@ uCRC_t::uCRC_t(uint8_t  Bits,
                bool     RefIn,
                bool     RefOut,
                uint64_t XorOut) noexcept:
-    poly    (Poly),
-    init    (Init),
-    xor_out (XorOut),
-    bits    (Bits),
-    ref_in  (RefIn),
-    ref_out (RefOut)
+    poly   (Poly),
+    init   (Init),
+    xor_out(XorOut),
+    bits   (Bits),
+    ref_in (RefIn),
+    ref_out(RefOut)
 {
     init_class();
 }
@@ -166,7 +167,6 @@ void uCRC_t::init_crc_table() noexcept
     //Calculation of the standard CRC table for byte.
     for(int i = 0; i < 256; i++)
     {
-
         uint64_t crc = 0;
 
         for(uint8_t mask = 0x80; mask; mask >>= 1)

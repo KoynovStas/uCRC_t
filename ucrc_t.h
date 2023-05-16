@@ -56,13 +56,13 @@
 class uCRC_t
 {
     public:
-        explicit uCRC_t(const std::string& Name = "CRC-32",
-                        uint8_t  Bits   = 32,
-                        uint64_t Poly   = 0x04c11db7,
-                        uint64_t Init   = 0xffffffff,
-                        bool     RefIn  = true,
-                        bool     RefOut = true,
-                        uint64_t XorOut = 0xffffffff) noexcept;
+        explicit uCRC_t(std::string Name   = "CRC-32",
+                        uint8_t     Bits   = 32,
+                        uint64_t    Poly   = 0x04c11db7,
+                        uint64_t    Init   = 0xffffffff,
+                        bool        RefIn  = true,
+                        bool        RefOut = true,
+                        uint64_t    XorOut = 0xffffffff) noexcept;
 
 
         explicit uCRC_t(uint8_t  Bits,
@@ -127,10 +127,10 @@ class uCRC_t
 
 
         static uint64_t reflect(uint64_t data, uint8_t num_bits) noexcept;
-        void     init_crc_table() noexcept;
-        void     init_class() noexcept;
+        void init_crc_table() noexcept;
+        void init_class() noexcept;
 
-        int      get_crc(uint64_t &crc, std::ifstream& ifs, void* buf, size_t size_buf) const noexcept;
+        int  get_crc(uint64_t &crc, std::ifstream& ifs, void* buf, size_t size_buf) const noexcept;
 };
 
 
