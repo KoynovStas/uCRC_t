@@ -198,7 +198,7 @@ TEST(test_crc_t_name)
 
     TEST_ASSERT( crc.name == "CRC-32" );
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -211,7 +211,7 @@ TEST(test_crc_t_name_2)
 
     TEST_ASSERT( crc.name == name );
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -230,7 +230,7 @@ TEST(test_crc_t_get_bits)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -252,7 +252,7 @@ TEST(test_crc_t_get_poly)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -275,7 +275,7 @@ TEST(test_crc_t_get_init)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -298,7 +298,7 @@ TEST(test_crc_t_get_xor_out)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -317,7 +317,7 @@ TEST(test_crc_t_get_ref_in)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -336,7 +336,7 @@ TEST(test_crc_t_get_ref_out)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -362,7 +362,7 @@ TEST(test_crc_t_set_bits)
         TEST_ASSERT( crc.set_bits(i) == -1 );
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -401,7 +401,7 @@ TEST(test_crc_std_check_constructor)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -441,7 +441,7 @@ TEST(test_crc_std_check_set_xxx)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -473,7 +473,7 @@ TEST(test_crc_std_check_file)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -498,7 +498,7 @@ TEST(test_crc_no_file)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -533,7 +533,7 @@ TEST(test_crc_for_cunks)
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
@@ -562,7 +562,7 @@ TEST(test_crc_for_cunks2) //test with get_raw_crc for first chunk
         spec++;
     }
 
-    TEST_PASS(NULL);
+    TEST_PASS(nullptr);
 }
 
 
