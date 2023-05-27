@@ -2,7 +2,7 @@
  * uCRC_t - is C++ class for calculation CRC any sizes 1-64 bits
  *
  *
- * version 1.4
+ * version 2.0
  *
  *
  * BSD 3-Clause License

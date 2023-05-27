@@ -10,6 +10,14 @@ Copyright (c) 2015, Koynov Stas - skojnov@yandex.ru
 
 
 ---
+## [v2.0](https://github.com/KoynovStas/uCRC_t/tree/v2.0) (2023-05-27)
+[Full Changelog](https://github.com/KoynovStas/uCRC_t/compare/v1.4...v2.0)
+
+
+### New
+ - New: Since version 2.0 required `C++11`
+
+
 
 
 ## [v1.4](https://github.com/KoynovStas/uCRC_t/tree/v1.4) (2023-05-14)

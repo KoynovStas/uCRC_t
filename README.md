@@ -176,14 +176,14 @@ if( !err )
 >  methods for calculate CRC file
 >
 >  ```C++
->  int get_crc(uint64_t &crc, const char* file_name) const;
+>  int get_crc(uint64_t &crc, const char* file_name) const noexcept;
 >  ```
 >  These method are reentrant. He use a buffer on the stack.
 >  The buffer size is 4 Kib (4096 bytes) which is optimal for most systems.
 >  If you have a buffer or needs aligned buffer, you can use the following method:
 >
 >  ```C++
->  int get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const;
+>  int get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) const noexcept;
 >  ```
 
 **Get CRC-32 for single buf:**
